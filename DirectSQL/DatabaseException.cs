@@ -6,9 +6,6 @@ namespace DirectSQL
 {
     class DatabaseException : Exception
     {
-        internal DatabaseException(String message, Exception exception) : base( message, exception)
-        {
-
-        }
+        internal DatabaseException(String message, Exception exception) : base( message, exception) {}
     }
 }
