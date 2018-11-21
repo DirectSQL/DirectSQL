@@ -37,14 +37,25 @@ namespace DirectSQL
 
         public void Process(SqlExecution execute)
         {
-            Task task = 
-                ProcessAsync( async( connection, transaction ) => { execute(connection, transaction); });
-            task.Wait();
+            using (var connection = CreateConnection())
+            {
+                connection.Open();
 
-            if (task.Exception == null)
-                return;
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        execute(connection, transaction);
 
-            throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, task.Exception);
+                        transaction.Commit();
+                    }
+                    catch (Exception exception)
+                    {
+                        transaction.Rollback();
+                        throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, exception);
+                    }
+                }
+            }
 
         }
 
