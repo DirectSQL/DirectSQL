@@ -10,6 +10,8 @@ namespace DirectSQL
         public delegate void SqlExecution(IDbConnection connection, IDbTransaction transaction);
         public delegate Task AsyncSqlExecution(IDbConnection connection, IDbTransaction transaction);
 
+        public delegate void ReadSqlResult(SqlResult result);
+
         public async Task ProcessAsync(AsyncSqlExecution execute)
         {
 
@@ -60,6 +62,68 @@ namespace DirectSQL
         }
 
         protected abstract IDbConnection CreateConnection();
+        protected abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
+
+        public static int ExecuteNonQuery(
+            string sql,
+            IDbDataParameter[] parameters,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            using( var command = connection.CreateCommand())
+            {
+                command.Transaction = transaction;
+
+                command.CommandText = sql;
+                SetParameters(command, parameters);
+
+                return command.ExecuteNonQuery();
+
+            }
+        }
+
+
+        public static int ExecuteNonQuery(
+            string sql,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            return ExecuteNonQuery(sql, new IDbDataParameter[0], connection, transaction);
+        }
+
+
+        public static void Query(
+            string sql, 
+            IDbDataParameter[] parameters,  
+            IDbConnection connection, 
+            IDbTransaction transaction,
+            ReadSqlResult readResult)
+        {
+            using (var result = new SqlResult(sql,parameters,connection,transaction))
+            {
+                result.Init();
+                readResult(result);
+            }
+        }
+
+
+        public static void Query(
+            string sql,
+            IDbConnection connection,
+            IDbTransaction transaction,
+            ReadSqlResult readResult)
+        {
+            Query(sql, new IDbDataParameter[0], connection, transaction, readResult);
+        }
+
+
+        internal static void SetParameters(IDbCommand command, IDbDataParameter[] parameters)
+        {
+            foreach (var parameter in parameters)
+            {
+                command.Parameters[parameter.ParameterName] = parameter;
+            }
+        }
 
     }
 }

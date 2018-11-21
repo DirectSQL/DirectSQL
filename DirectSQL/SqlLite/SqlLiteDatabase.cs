@@ -21,5 +21,11 @@ namespace DirectSQL.SqlLite
         {
             return new SQLiteConnection( _sqlLiteConnectionString );
         }
+
+
+        protected override IDbDataParameter CreateDbDataParameter(string name, object value)
+        {
+            return new SQLiteParameter(name, value);
+        }
     }
 }
