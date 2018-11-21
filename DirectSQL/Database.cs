@@ -7,9 +7,10 @@ namespace DirectSQL
     public abstract class Database
     {
 
-        public delegate Task SqlExecution(IDbConnection connection, IDbTransaction transaction);
+        public delegate void SqlExecution(IDbConnection connection, IDbTransaction transaction);
+        public delegate Task AsyncSqlExecution(IDbConnection connection, IDbTransaction transaction);
 
-        public async Task ProcessAsync(SqlExecution execute)
+        public async Task ProcessAsync(AsyncSqlExecution execute)
         {
 
             using ( var connection = CreateConnection())
@@ -36,7 +37,8 @@ namespace DirectSQL
 
         public void Process(SqlExecution execute)
         {
-            Task task = ProcessAsync(execute);
+            Task task = 
+                ProcessAsync( async( connection, transaction ) => { execute(connection, transaction); });
             task.Wait();
 
             if (task.Exception == null)
