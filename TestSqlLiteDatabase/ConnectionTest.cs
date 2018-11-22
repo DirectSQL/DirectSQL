@@ -14,6 +14,10 @@ namespace TestSqlLiteDatabase
         public void TestConnect()
         {
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
+
+            db.Process((connection) => {
+            });
+
             db.Process( (connection, transaction) =>
             {
             });
@@ -23,11 +27,16 @@ namespace TestSqlLiteDatabase
         public void TestConnectAsync()
         {
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
-            Task task = db.ProcessAsync( async (connection, transaction) =>
+
+            Task task1 = db.ProcessAsync(async (connection) =>
             {
             });
+            task1.Wait();
 
-            task.Wait();
+            Task task2 = db.ProcessAsync( async (connection, transaction) =>
+            {
+            });
+            task2.Wait();
 
         }
 
