@@ -10,39 +10,75 @@ namespace DirectSQL
         public delegate void SqlExecution(IDbConnection connection, IDbTransaction transaction);
         public delegate Task AsyncSqlExecution(IDbConnection connection, IDbTransaction transaction);
 
+        public delegate void ConnectExecution(IDbConnection connection);
+        public delegate Task AsyncConnectExecution(IDbConnection connection);
+
         public delegate void ReadSqlResult(SqlResult result);
 
-        public async Task ProcessAsync(AsyncSqlExecution execute)
-        {
-
-            using ( var connection = CreateConnection())
-            {
-                connection.Open();
-                    
-                using( var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        await execute(connection, transaction);
-
-                        transaction.Commit();
-                    }
-                    catch(Exception exception)
-                    {
-                        transaction.Rollback();
-                        throw new DatabaseException(MessageResource.msg_error_asyncSqlExecutionError, exception);
-                    }
-                }
-            }
-
-        }
-
-        public void Process(SqlExecution execute)
+        /// <summary>
+        /// Asyncronous process with a connection
+        /// </summary>
+        /// <param name="execute">execution with a connection</param>
+        /// <returns></returns>
+        public async Task ProcessAsync(AsyncConnectExecution execute)
         {
             using (var connection = CreateConnection())
             {
                 connection.Open();
+                await execute(connection);
 
+            }
+        }
+
+        /// <summary>
+        /// Asyncronous process with a connection and a transaction
+        /// </summary>
+        /// <param name="execute">execution with a connection and a transaction</param>
+        /// <returns></returns>
+        public async Task ProcessAsync(AsyncSqlExecution execute)
+        {
+
+           await ProcessAsync(async (connection) =>
+           {
+               using (var transaction = connection.BeginTransaction())
+               {
+                   try
+                   {
+                       await execute(connection, transaction);
+
+                       transaction.Commit();
+                   }
+                   catch (Exception exception)
+                   {
+                       transaction.Rollback();
+                       throw new DatabaseException(MessageResource.msg_error_asyncSqlExecutionError, exception);
+                   }
+               }
+           });
+
+        }
+
+        /// <summary>
+        /// Syncronous process with a connection
+        /// </summary>
+        /// <param name="execute">execution with a connection</param>
+        public void Process(ConnectExecution execute)
+        {
+            using (var connection = CreateConnection())
+            {
+                connection.Open();
+                execute(connection);
+            }
+        }
+
+        /// <summary>
+        /// Syncronous process with a connection and a transaction
+        /// </summary>
+        /// <param name="execute">execution with a connection and a transaction</param>
+        public void Process(SqlExecution execute)
+        {
+            Process((connection) =>
+            {
                 using (var transaction = connection.BeginTransaction())
                 {
                     try
@@ -57,7 +93,7 @@ namespace DirectSQL
                         throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, exception);
                     }
                 }
-            }
+            });
 
         }
 
