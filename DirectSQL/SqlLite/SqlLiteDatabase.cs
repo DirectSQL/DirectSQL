@@ -23,9 +23,15 @@ namespace DirectSQL.SqlLite
         }
 
 
-        protected override IDbDataParameter CreateDbDataParameter(string name, object value)
+        public override IDbDataParameter CreateDbDataParameter(string name, object value)
+        {
+            return CreateSQLiteParameter(name, value);
+        }
+
+        public static SQLiteParameter CreateSQLiteParameter(string name, object value)
         {
             return new SQLiteParameter(name, value);
         }
+
     }
 }

@@ -62,7 +62,7 @@ namespace DirectSQL
         }
 
         protected abstract IDbConnection CreateConnection();
-        protected abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
+        public abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
 
         public static int ExecuteNonQuery(
             string sql,
@@ -119,9 +119,9 @@ namespace DirectSQL
 
         internal static void SetParameters(IDbCommand command, IDbDataParameter[] parameters)
         {
-            foreach (var parameter in parameters)
+            for (int i = 0; i < parameters.Length; i ++)
             {
-                command.Parameters[parameter.ParameterName] = parameter;
+                command.Parameters.Add(parameters[i]);
             }
         }
 

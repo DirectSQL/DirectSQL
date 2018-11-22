@@ -43,6 +43,36 @@ namespace TestSqlLiteDatabase
                         }
                     }
                 );
+
+                SqlLiteDatabase.Query(
+                    "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
+                    new IDbDataParameter[] { db.CreateDbDataParameter("@val1","abcdef")},
+                    connection,
+                    transaction,
+                    (result) => {
+                        if (result.Next())
+                        {
+                            var resultValues = result.ResultValues();
+                            Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
+                            Assert.AreEqual(resultValues.TEST_VAL2, 123);
+                        }
+                        else
+                        {
+                            Assert.Fail();
+                        }
+                    }
+                );
+
+                SqlLiteDatabase.Query(
+                    "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
+                    new IDbDataParameter[] { db.CreateDbDataParameter("@val1", "XXXXXXX") },
+                    connection,
+                    transaction,
+                    (result) => {
+                        Assert.IsFalse(result.Next());
+                    }
+                );
+
             });
         }
 
