@@ -33,7 +33,7 @@ namespace TestSqlLiteDatabase
                     (result) => {
                         if (result.Next())
                         {
-                            var resultValues = result.ResultValues();
+                            var resultValues = result.ResultValues;
                             Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
                             Assert.AreEqual(resultValues.TEST_VAL2, 123);
                         }
@@ -52,7 +52,7 @@ namespace TestSqlLiteDatabase
                     (result) => {
                         if (result.Next())
                         {
-                            var resultValues = result.ResultValues();
+                            var resultValues = result.ResultValues;
                             Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
                             Assert.AreEqual(resultValues.TEST_VAL2, 123);
                         }

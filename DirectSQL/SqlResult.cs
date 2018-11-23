@@ -13,6 +13,8 @@ namespace DirectSQL
 
         private ImmutableArray<String> _resultFields;
 
+        private ExpandoObject _resultValues;
+
         public IDataReader Reader
         {
             get
@@ -38,6 +40,17 @@ namespace DirectSQL
             }
         }
 
+
+        public dynamic ResultValues
+        {
+            get
+            {
+                InitResultValues();
+                return _resultValues;
+            }
+        }
+
+
         internal SqlResult ( 
             String sql, 
             (String,object)[] parameters, 
@@ -56,21 +69,10 @@ namespace DirectSQL
 
         public bool Next()
         {
+            _resultValues = null;
             return _reader.Read();
         }
 
-        public dynamic ResultValues()
-        {
-            var values = new ExpandoObject();
-
-            for (int i = 0; i < _reader.FieldCount; i++)
-            {
-                values.TryAdd(ResultFields[i],_reader.GetValue(i));
-            }
-
-            return values;
-
-        }
 
         internal void Init()
         {
@@ -89,6 +91,27 @@ namespace DirectSQL
             }
 
             _resultFields = ImmutableArray.ToImmutableArray<String>(list);
+
+        }
+
+        private void InitResultValues()
+        {
+            if (_resultValues != null)
+                return;
+            _resultValues = CreateResultValue(_reader, ResultFields);
+
+        }
+
+        private static ExpandoObject CreateResultValue(IDataReader reader, ImmutableArray<String> fields)
+        {
+            var values = new ExpandoObject();
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                values.TryAdd(fields[i], reader.GetValue(i));
+            }
+
+            return values;
 
         }
 
