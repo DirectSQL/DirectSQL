@@ -46,7 +46,7 @@ namespace TestSqlLiteDatabase
 
                 SqlLiteDatabase.Query(
                     "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
-                    new IDbDataParameter[] { db.CreateDbDataParameter("@val1","abcdef")},
+                    new(String,object)[] {ValueTuple.Create("@val1","abcdef")},
                     connection,
                     transaction,
                     (result) => {
@@ -65,7 +65,7 @@ namespace TestSqlLiteDatabase
 
                 SqlLiteDatabase.Query(
                     "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
-                    new IDbDataParameter[] { db.CreateDbDataParameter("@val1", "XXXXXXX") },
+                    new (String, object)[] { ValueTuple.Create("@val1", "XXXXXXX") },
                     connection,
                     transaction,
                     (result) => {
