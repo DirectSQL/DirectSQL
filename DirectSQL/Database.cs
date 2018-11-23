@@ -103,7 +103,7 @@ namespace DirectSQL
 
         public static int ExecuteNonQuery(
             string sql,
-            (String,object)[] parameters,
+            (String, object)[] parameters,
             IDbConnection connection,
             IDbTransaction transaction)
         {
