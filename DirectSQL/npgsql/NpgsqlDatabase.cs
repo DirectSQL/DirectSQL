@@ -12,7 +12,7 @@ namespace DirectSQL.Npgsql
 
         readonly private String _npgsqlConnectionString;
 
-        public NpgsqlDatabase( String npgsqlConnectionString)
+        public NpgsqlDatabase(String npgsqlConnectionString)
         {
             _npgsqlConnectionString = npgsqlConnectionString;
         }
