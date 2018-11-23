@@ -14,5 +14,6 @@ Now, this library has supporting code for next DBMS
 * SQL Server
 * PostgreSQL (Npgsql)
 * CockroachDB (Npgsql)
+* DB2
 
 Please try.
