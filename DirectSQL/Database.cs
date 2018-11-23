@@ -47,7 +47,7 @@ namespace DirectSQL
 
 
         /// <summary>
-        /// Asyncronous process with a connection
+        /// Asynchronous process with a connection
         /// </summary>
         /// <param name="execute">execution with a connection</param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace DirectSQL
         }
 
         /// <summary>
-        /// Asyncronous process with a connection and a transaction
+        /// Asynchronous process with a connection and a transaction
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
         /// <returns></returns>
@@ -90,7 +90,7 @@ namespace DirectSQL
         }
 
         /// <summary>
-        /// Syncronous process with a connection
+        /// Synchronous process with a connection
         /// </summary>
         /// <param name="execute">execution with a connection</param>
         public void Process(ConnectExecution execute)
@@ -103,7 +103,7 @@ namespace DirectSQL
         }
 
         /// <summary>
-        /// Syncronous process with a connection and a transaction
+        /// Synchronous process with a connection and a transaction
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
         public void Process(SqlExecution execute)
