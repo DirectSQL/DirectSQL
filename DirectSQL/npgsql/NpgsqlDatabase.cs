@@ -23,7 +23,7 @@ namespace DirectSQL.Npgsql
         }
 
 
-        public static NpgsqlParameter CreateSQLiteParameter(string name, object value)
+        public static NpgsqlParameter CreateNpgsqlParameter(string name, object value)
         {
             return new NpgsqlParameter(name, value);
         }
