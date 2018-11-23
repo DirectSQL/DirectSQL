@@ -5,13 +5,38 @@ using System.Threading.Tasks;
 
 namespace DirectSQL
 {
-
+    /// <summary>
+    /// Execute a sql with a connection and a transaction.
+    /// </summary>
+    /// <param name="connection">a connection</param>
+    /// <param name="transaction">a transaction</param>
     public delegate void SqlExecution(IDbConnection connection, IDbTransaction transaction);
+
+    /// <summary>
+    /// Execute a sql asynchronously with a connection and a transaction.
+    /// </summary>
+    /// <param name="connection">a connection</param>
+    /// <param name="transaction">a transaction</param>
+    /// <returns></returns>
     public delegate Task AsyncSqlExecution(IDbConnection connection, IDbTransaction transaction);
 
+    /// <summary>
+    /// Do something with a connection
+    /// </summary>
+    /// <param name="connection">a connection</param>
     public delegate void ConnectExecution(IDbConnection connection);
+
+    /// <summary>
+    /// Do something asynchronously with a connection.
+    /// </summary>
+    /// <param name="connection">a connection</param>
+    /// <returns></returns>
     public delegate Task AsyncConnectExecution(IDbConnection connection);
 
+    /// <summary>
+    /// Read sql result.
+    /// </summary>
+    /// <param name="result">result to be read</param>
     public delegate void ReadSqlResult(SqlResult result);
 
     public abstract class Database
