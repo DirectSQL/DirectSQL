@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.5.1</Version>
+    <Version>1.6.0</Version>
     <Authors />
     <PackageLicenseUrl>https://github.com/7k8m/DirectSQL/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/7k8m/DirectSQL/</PackageProjectUrl>
+    <Description>Execute SQL directly !
+This .NET library is very thin database framework on top of System.Data.</Description>
   </PropertyGroup>
 
   <ItemGroup>
