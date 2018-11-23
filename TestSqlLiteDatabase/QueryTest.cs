@@ -73,6 +73,21 @@ namespace TestSqlLiteDatabase
                     }
                 );
 
+                var abcdef = SqlLiteDatabase.ExecuteScalar(
+                    "select TEST_VAL1 from TEST_TABLE",
+                    connection,
+                    transaction
+                );
+                Assert.AreEqual(abcdef, "abcdef");
+
+                var abcdef2 = SqlLiteDatabase.ExecuteScalar(
+                    "select TEST_VAL1 from TEST_TABLE where TEST_VAL1 = @val1",
+                    new (String, object)[] { ValueTuple.Create("@val1", "abcdef") },
+                    connection,
+                    transaction
+                );
+                Assert.AreEqual(abcdef2, "abcdef");
+
             });
         }
 

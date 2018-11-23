@@ -122,6 +122,34 @@ namespace DirectSQL
         }
 
 
+        public static object ExecuteScalar(
+            string sql,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            return ExecuteScalar(sql, new ValueTuple<String, object>[0], connection, transaction);
+        }
+
+
+        public static object ExecuteScalar(
+            string sql,
+            (String, object)[] parameters,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.Transaction = transaction;
+
+                command.CommandText = sql;
+                SetParameters(command, parameters);
+
+                return command.ExecuteScalar();
+
+            }
+        }
+
+
         public static int ExecuteNonQuery(
             string sql,
             IDbConnection connection,
@@ -129,6 +157,7 @@ namespace DirectSQL
         {
             return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
         }
+
 
 
         public static void Query(
