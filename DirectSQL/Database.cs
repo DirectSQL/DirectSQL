@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -98,11 +99,11 @@ namespace DirectSQL
         }
 
         protected abstract IDbConnection CreateConnection();
-        public abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
+        protected abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
 
         public static int ExecuteNonQuery(
             string sql,
-            IDbDataParameter[] parameters,
+            (String, object)[] parameters,
             IDbConnection connection,
             IDbTransaction transaction)
         {
@@ -124,13 +125,13 @@ namespace DirectSQL
             IDbConnection connection,
             IDbTransaction transaction)
         {
-            return ExecuteNonQuery(sql, new IDbDataParameter[0], connection, transaction);
+            return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
         }
 
 
         public static void Query(
-            string sql, 
-            IDbDataParameter[] parameters,  
+            string sql,
+            (String, object)[] parameters,  
             IDbConnection connection, 
             IDbTransaction transaction,
             ReadSqlResult readResult)
@@ -149,15 +150,18 @@ namespace DirectSQL
             IDbTransaction transaction,
             ReadSqlResult readResult)
         {
-            Query(sql, new IDbDataParameter[0], connection, transaction, readResult);
+            Query(sql, new ValueTuple<String,object>[0],connection,transaction, readResult);
         }
 
-
-        internal static void SetParameters(IDbCommand command, IDbDataParameter[] parameters)
+        internal static void SetParameters(IDbCommand command, ValueTuple<String,object>[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)
             {
-                command.Parameters.Add(parameters[i]);
+                IDbDataParameter parameter = command.CreateParameter();
+                parameter.ParameterName = parameters[i].Item1;
+                parameter.Value = parameters[i].Item2;
+
+                command.Parameters.Add(parameter);
             }
         }
 

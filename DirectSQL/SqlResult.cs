@@ -40,7 +40,7 @@ namespace DirectSQL
 
         internal SqlResult ( 
             String sql, 
-            IDbDataParameter[] parameters, 
+            (String,object)[] parameters, 
             IDbConnection connection, 
             IDbTransaction transaction)
         {

@@ -23,7 +23,7 @@ namespace DirectSQL.SqlServer
         }
 
 
-        public override IDbDataParameter CreateDbDataParameter(string name, object value)
+        protected override IDbDataParameter CreateDbDataParameter(string name, object value)
         {
             return CreateSqlParameter(name, value);
         }
