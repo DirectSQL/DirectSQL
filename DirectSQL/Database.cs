@@ -39,6 +39,9 @@ namespace DirectSQL
     /// <param name="result">result to be read</param>
     public delegate void ReadSqlResult(SqlResult result);
 
+    /// <summary>
+    /// Database class is entry point of DirectSQL library.
+    /// </summary>
     public abstract class Database
     {
 
@@ -125,9 +128,20 @@ namespace DirectSQL
 
         }
 
+        /// <summary>
+        /// Sub class implements actual method to create a connection.
+        /// </summary>
+        /// <returns></returns>
         protected abstract IDbConnection CreateConnection();
-        protected abstract IDbDataParameter CreateDbDataParameter(String name, Object value);
 
+        /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>affected row count</returns>
         public static int ExecuteNonQuery(
             string sql,
             (String, object)[] parameters,
@@ -146,7 +160,29 @@ namespace DirectSQL
             }
         }
 
+        /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>affected row count</returns>
+        public static int ExecuteNonQuery(
+            string sql,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
+        }
 
+
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
         public static object ExecuteScalar(
             string sql,
             IDbConnection connection,
@@ -155,7 +191,14 @@ namespace DirectSQL
             return ExecuteScalar(sql, new ValueTuple<String, object>[0], connection, transaction);
         }
 
-
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
         public static object ExecuteScalar(
             string sql,
             (String, object)[] parameters,
@@ -175,16 +218,14 @@ namespace DirectSQL
         }
 
 
-        public static int ExecuteNonQuery(
-            string sql,
-            IDbConnection connection,
-            IDbTransaction transaction)
-        {
-            return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
-        }
-
-
-
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="transaction">a transaction to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
         public static void Query(
             string sql,
             (String, object)[] parameters,  
@@ -200,6 +241,13 @@ namespace DirectSQL
         }
 
 
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="transaction">a transaction to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
         public static void Query(
             string sql,
             IDbConnection connection,
@@ -209,6 +257,11 @@ namespace DirectSQL
             Query(sql, new (String,object)[0],connection,transaction, readResult);
         }
 
+        /// <summary>
+        /// Bind parameters to a command of sql
+        /// </summary>
+        /// <param name="command">command of sql</param>
+        /// <param name="parameters">parameter values bound to sql</param>
         internal static void SetParameters(IDbCommand command, (String,object)[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)

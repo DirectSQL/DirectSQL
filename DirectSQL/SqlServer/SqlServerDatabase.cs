@@ -22,12 +22,6 @@ namespace DirectSQL.SqlServer
             return new SqlConnection ( _sqlServerConnectionString );
         }
 
-
-        protected override IDbDataParameter CreateDbDataParameter(string name, object value)
-        {
-            return CreateSqlParameter(name, value);
-        }
-
         public static SqlParameter CreateSqlParameter(string name, object value)
         {
             return new SqlParameter(name, value);
