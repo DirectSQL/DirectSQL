@@ -45,7 +45,6 @@ namespace DirectSQL
     public abstract class Database
     {
 
-
         /// <summary>
         /// Asynchronous process with a connection
         /// </summary>
