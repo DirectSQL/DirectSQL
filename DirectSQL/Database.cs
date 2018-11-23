@@ -131,7 +131,7 @@ namespace DirectSQL
 
         public static void Query(
             string sql,
-            ValueTuple<String, object>[] parameters,  
+            (String, object)[] parameters,  
             IDbConnection connection, 
             IDbTransaction transaction,
             ReadSqlResult readResult)
