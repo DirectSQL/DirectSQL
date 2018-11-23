@@ -15,6 +15,7 @@ This .NET library is very thin database framework on top of System.Data.</Descri
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="IBM.Data.DB2.Core" Version="1.2.2.100" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="System.Data.SQLite.Core.MSIL" Version="1.0.109" />
