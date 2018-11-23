@@ -12,7 +12,7 @@ namespace DirectSQL.SqlLite
 
         readonly private String _sqlLiteConnectionString;
 
-        public SqlLiteDatabase( String sqlLiteConnectionString)
+        public SqlLiteDatabase(String sqlLiteConnectionString)
         {
             _sqlLiteConnectionString = sqlLiteConnectionString;
         }

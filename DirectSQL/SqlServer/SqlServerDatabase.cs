@@ -12,7 +12,7 @@ namespace DirectSQL.SqlServer
 
         readonly private String _sqlServerConnectionString;
 
-        public SqlServerDatabase( String sqlServerConnectionString)
+        public SqlServerDatabase(String sqlServerConnectionString)
         {
             _sqlServerConnectionString = sqlServerConnectionString;
         }
