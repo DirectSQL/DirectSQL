@@ -25,6 +25,10 @@ namespace TestSqlLiteDatabase
                     "insert into TEST_TABLE(TEST_VAL1,TEST_VAL2) values('abcdef',123)",
                     connection,
                     transaction);
+                SqlLiteDatabase.ExecuteNonQuery(
+                     "insert into TEST_TABLE(TEST_VAL1,TEST_VAL2) values('xyz',456)",
+                     connection,
+                     transaction);
 
                 SqlLiteDatabase.Query(
                     "select TEST_VAL1,TEST_VAL2 from TEST_TABLE",
@@ -36,6 +40,17 @@ namespace TestSqlLiteDatabase
                             var resultValues = result.ResultValues;
                             Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
                             Assert.AreEqual(resultValues.TEST_VAL2, 123);
+
+                            //Same instance
+                            Assert.AreSame(resultValues, result.ResultValues);
+
+                            //go to next row.
+                            result.Next();
+
+                            var resultValues2 = result.ResultValues;
+                            Assert.AreEqual(resultValues2.TEST_VAL1, "xyz");
+                            Assert.AreEqual(resultValues2.TEST_VAL2, 456);
+
                         }
                         else
                         {
