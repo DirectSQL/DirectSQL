@@ -1,4 +1,6 @@
 # DirectSQL
+![build on master](https://7k8m.visualstudio.com/DirectSQL/_apis/build/status/DirectSQL-.NET-CI)
+
 Execute SQL directly !
 
 This .NET library is very thin database framework on top of System.Data.
