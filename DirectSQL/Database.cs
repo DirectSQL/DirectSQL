@@ -56,7 +56,6 @@ namespace DirectSQL
             {
                 connection.Open();
                 await execute(connection);
-
             }
         }
 
@@ -124,7 +123,6 @@ namespace DirectSQL
                     }
                 }
             });
-
         }
 
         /// <summary>
@@ -155,7 +153,6 @@ namespace DirectSQL
                 SetParameters(command, parameters);
 
                 return command.ExecuteNonQuery();
-
             }
         }
 
@@ -212,7 +209,6 @@ namespace DirectSQL
                 SetParameters(command, parameters);
 
                 return command.ExecuteScalar();
-
             }
         }
 
