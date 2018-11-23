@@ -10,7 +10,7 @@ namespace DirectSQL.SqlServer
     public class SqlServerDatabase : Database
     {
 
-        private String _sqlServerConnectionString;
+        readonly private String _sqlServerConnectionString;
 
         public SqlServerDatabase( String sqlServerConnectionString)
         {
