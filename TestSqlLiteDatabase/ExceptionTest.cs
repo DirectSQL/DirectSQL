@@ -41,6 +41,7 @@ namespace TestSqlLiteDatabase
 
             Task task = db.ProcessAsync(async (connection, transaction) =>
             {
+                await Task.Delay(1); //Dummy code to resolve warning in build.
                 throw new ApplicationException(ERROR_MSG);
             });
 
