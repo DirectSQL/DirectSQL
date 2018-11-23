@@ -150,10 +150,10 @@ namespace DirectSQL
             IDbTransaction transaction,
             ReadSqlResult readResult)
         {
-            Query(sql, new ValueTuple<String,object>[0],connection,transaction, readResult);
+            Query(sql, new (String,object)[0],connection,transaction, readResult);
         }
 
-        internal static void SetParameters(IDbCommand command, ValueTuple<String,object>[] parameters)
+        internal static void SetParameters(IDbCommand command, (String,object)[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)
             {
