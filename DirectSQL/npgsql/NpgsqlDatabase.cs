@@ -10,7 +10,7 @@ namespace DirectSQL.Npgsql
     public class NpgsqlDatabase : Database
     {
 
-        private String _npgsqlConnectionString;
+        readonly private String _npgsqlConnectionString;
 
         public NpgsqlDatabase( String npgsqlConnectionString)
         {
