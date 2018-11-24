@@ -15,5 +15,6 @@ Now, this library has supporting code for next DBMS
 * PostgreSQL (Npgsql)
 * CockroachDB (Npgsql)
 * DB2
+* MySql
 
 Please try.
