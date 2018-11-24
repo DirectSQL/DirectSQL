@@ -9,7 +9,7 @@
           "src": "C:\\dev\\DirectSQL\\DirectSQL\\DirectSQL"
         }
       ],
-      "dest": "api",
+      "dest": "doc/api",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
@@ -18,30 +18,30 @@
     "content": [
       {
         "files": [
-          "api/**.yml",
-          "api/index.md"
+          "doc/api/**.yml",
+          "doc/api/index.md"
         ]
       },
       {
         "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
-          "toc.yml",
-          "*.md"
+          "doc/articles/**.md",
+          "doc/articles/**/toc.yml",
+          "doc/toc.yml",
+          "doc/*.md"
         ]
       }
     ],
     "resource": [
       {
         "files": [
-          "images/**"
+          "doc/images/**"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "apidoc/**.md"
+          "doc/apidoc/**.md"
         ],
         "exclude": [
           "obj/**",
