@@ -69,20 +69,7 @@ namespace DirectSQL
 
            await ProcessAsync(async (connection) =>
            {
-               using (var transaction = connection.BeginTransaction())
-               {
-                   try
-                   {
-                       await execute(connection, transaction);
-
-                       transaction.Commit();
-                   }
-                   catch (Exception exception)
-                   {
-                       transaction.Rollback();
-                       throw new DatabaseException(MessageResource.msg_error_asyncSqlExecutionError, exception);
-                   }
-               }
+               await TransactionAsync(connection, execute);
            });
 
         }
@@ -108,20 +95,7 @@ namespace DirectSQL
         {
             Process((connection) =>
             {
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        execute(connection, transaction);
-
-                        transaction.Commit();
-                    }
-                    catch (Exception exception)
-                    {
-                        transaction.Rollback();
-                        throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, exception);
-                    }
-                }
+                Transaction(connection, execute);
             });
         }
 
@@ -268,6 +242,52 @@ namespace DirectSQL
                 command.Parameters.Add(parameter);
             }
         }
+
+
+        /// <summary>
+        /// Execute in a transaction.
+        /// </summary>
+        /// <param name="connection">connection to be used</param>
+        /// <param name="execute">to be executed</param>
+        public static void Transaction(IDbConnection connection, SqlExecution execute)
+        {
+            using(var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    execute(connection, transaction);
+                }
+                catch( Exception exception )
+                {
+                    transaction.Rollback();
+                    throw new DatabaseException( MessageResource.msg_error_sqlExecutionError, exception );
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Execute in a transaction asynchronously.
+        /// </summary>
+        /// <param name="connection">connection to be used</param>
+        /// <param name="execute">to be executed</param>
+        /// <returns>A task stands for asynchronous execution</returns>
+        public static async Task TransactionAsync(IDbConnection connection, AsyncSqlExecution execute)
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    await execute(connection, transaction);
+                }
+                catch (Exception exception)
+                {
+                    transaction.Rollback();
+                    throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, exception);
+                }
+            }
+        }
+
 
     }
 }
