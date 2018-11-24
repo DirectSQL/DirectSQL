@@ -11,7 +11,7 @@ using System.Data;
 namespace TestSqlLiteDatabase
 {
     [TestClass]
-    public class TestSqlResult
+    public class SqlResultTest
     {
         [TestMethod]
         public void TestCommandText()
