@@ -87,13 +87,13 @@ namespace TestSqlLiteDatabase
                             var failedToRead = result.ResultValues;
                         });
 
-                        result.Next();
+                        Assert.IsTrue( result.Next() );
 
                         var resultValues = result.ResultValues;
                         Assert.AreEqual(resultValues.TEST_COL1, "testValue");
                         Assert.AreEqual(resultValues.TEST_COL2, 123);
 
-                        result.Next();
+                        Assert.IsFalse( result.Next() );
 
                         Assert.ThrowsException<InvalidOperationException>(() =>
                         {
