@@ -141,7 +141,7 @@ namespace DirectSQL
         /// <returns>affected row count</returns>
         public static int ExecuteNonQuery(
             string sql,
-            (String, object)[] parameters,
+            (String name, object value)[] parameters,
             IDbConnection connection,
             IDbTransaction transaction)
         {
@@ -197,7 +197,7 @@ namespace DirectSQL
         /// <returns>result of sql</returns>
         public static object ExecuteScalar(
             string sql,
-            (String, object)[] parameters,
+            (String name, object value)[] parameters,
             IDbConnection connection,
             IDbTransaction transaction)
         {
@@ -223,7 +223,7 @@ namespace DirectSQL
         /// <param name="readResult">function to read result of sql</param>
         public static void Query(
             string sql,
-            (String, object)[] parameters,  
+            (String name, object value)[] parameters,  
             IDbConnection connection, 
             IDbTransaction transaction,
             ReadSqlResult readResult)
@@ -257,13 +257,13 @@ namespace DirectSQL
         /// </summary>
         /// <param name="command">command of sql</param>
         /// <param name="parameters">parameter values bound to sql</param>
-        internal static void SetParameters(IDbCommand command, (String,object)[] parameters)
+        internal static void SetParameters(IDbCommand command, (String name,object value)[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)
             {
                 IDbDataParameter parameter = command.CreateParameter();
-                parameter.ParameterName = parameters[i].Item1;
-                parameter.Value = parameters[i].Item2;
+                parameter.ParameterName = parameters[i].name;
+                parameter.Value = parameters[i].value;
 
                 command.Parameters.Add(parameter);
             }

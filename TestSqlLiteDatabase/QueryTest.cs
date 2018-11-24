@@ -39,17 +39,23 @@ namespace TestSqlLiteDatabase
                         {
                             var resultValues = result.ResultValues;
                             Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
-                            Assert.AreEqual(resultValues.TEST_VAL2, 123);
+                            Assert.AreEqual(resultValues.TEST_VAL2, 123L);
 
                             //Same instance
                             Assert.AreSame(resultValues, result.ResultValues);
+
+                            var resultTuples = result.ResultTuples;
+                            Assert.AreEqual(resultTuples[0].name, "TEST_VAL1");
+                            Assert.AreEqual(resultTuples[0].value, "abcdef");
+                            Assert.AreEqual(resultTuples[1].name, "TEST_VAL2");
+                            Assert.AreEqual(resultTuples[1].value, 123L); 
 
                             //go to next row.
                             result.Next();
 
                             var resultValues2 = result.ResultValues;
                             Assert.AreEqual(resultValues2.TEST_VAL1, "xyz");
-                            Assert.AreEqual(resultValues2.TEST_VAL2, 456);
+                            Assert.AreEqual(resultValues2.TEST_VAL2, 456L);
 
                         }
                         else
@@ -69,7 +75,7 @@ namespace TestSqlLiteDatabase
                         {
                             var resultValues = result.ResultValues;
                             Assert.AreEqual(resultValues.TEST_VAL1, "abcdef");
-                            Assert.AreEqual(resultValues.TEST_VAL2, 123);
+                            Assert.AreEqual(resultValues.TEST_VAL2, 123L);
                         }
                         else
                         {
@@ -121,6 +127,5 @@ namespace TestSqlLiteDatabase
 
             }
         }
-
     }
 }

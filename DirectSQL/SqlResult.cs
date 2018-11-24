@@ -14,6 +14,7 @@ namespace DirectSQL
         private ImmutableArray<String> _resultFields;
 
         private ExpandoObject _resultValues;
+        private (String name, Object value)[] _resultTuples;
 
         public IDataReader Reader
         {
@@ -51,9 +52,19 @@ namespace DirectSQL
         }
 
 
+        public (String name,Object value)[] ResultTuples
+        {
+            get
+            {
+                InitResultTuples();
+                return _resultTuples;
+            }
+        }
+
+
         internal SqlResult ( 
             String sql, 
-            (String,object)[] parameters, 
+            (String name,object value)[] parameters, 
             IDbConnection connection, 
             IDbTransaction transaction)
         {
@@ -70,7 +81,10 @@ namespace DirectSQL
         public bool Next()
         {
             _resultValues = null;
+            _resultTuples = null;
+
             return _reader.Read();
+
         }
 
 
@@ -94,6 +108,7 @@ namespace DirectSQL
 
         }
 
+
         private void InitResultValues()
         {
             if (_resultValues != null)
@@ -113,6 +128,24 @@ namespace DirectSQL
 
             return values;
 
+        }
+
+
+        private void InitResultTuples()
+        {
+            if (_resultTuples != null)
+                return;
+            _resultTuples = CreateResultTuples(_reader, ResultFields);
+        }
+
+        private static (string, object)[] CreateResultTuples(IDataReader reader, ImmutableArray<string> resultFields)
+        {
+            var array = new (String, object)[resultFields.Length];
+            for(int i = 0; i < resultFields.Length; i ++)
+            {
+                array[i] = (resultFields[i], reader.GetValue(i));
+            }
+            return array;
         }
 
         internal void Close()
