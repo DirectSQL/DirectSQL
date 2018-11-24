@@ -6,6 +6,10 @@ using System.Dynamic;
 
 namespace DirectSQL
 {
+    /// <summary>
+    /// Object to get result of SQL
+    /// </summary>
+    /// <remarks>This stands for cursor in RDB</remarks>
     public class SqlResult:IDisposable
     {
         private IDataReader _reader;
@@ -16,6 +20,9 @@ namespace DirectSQL
         private ExpandoObject _resultValues;
         private (String name, Object value)[] _resultTuples;
 
+        /// <summary>
+        /// Reader in ADO.NET
+        /// </summary>
         public IDataReader Reader
         {
             get
@@ -24,6 +31,9 @@ namespace DirectSQL
             }
         }
 
+        /// <summary>
+        /// Command in ADO.NET
+        /// </summary>
         public IDbCommand Command
         {
             get
@@ -32,6 +42,9 @@ namespace DirectSQL
             }
         }
 
+        /// <summary>
+        /// Fields in result
+        /// </summary>
         public ImmutableArray<String> ResultFields
         {
             get
@@ -41,7 +54,12 @@ namespace DirectSQL
             }
         }
 
-
+        /// <summary>
+        /// Result values as dynamic object
+        /// </summary>
+        /// <remarks>
+        /// Each column in result has a field in dynamic object.
+        /// </remarks>
         public dynamic ResultValues
         {
             get
@@ -51,7 +69,15 @@ namespace DirectSQL
             }
         }
 
-
+        /// <summary>
+        /// Result values as an array of tuples
+        /// </summary>
+        /// <remarks>
+        /// Each tuple has name and value.
+        /// Name is name of column and 
+        /// value is value of column
+        /// in result row
+        /// </remarks>
         public (String name,Object value)[] ResultTuples
         {
             get
@@ -78,6 +104,10 @@ namespace DirectSQL
         }
 
 
+        /// <summary>
+        /// Move cursor to next
+        /// </summary>
+        /// <returns>New row has values or not</returns>
         public bool Next()
         {
             _resultValues = null;
@@ -148,6 +178,7 @@ namespace DirectSQL
             return array;
         }
 
+
         internal void Close()
         {
             if (_reader != null)
@@ -157,6 +188,9 @@ namespace DirectSQL
                 _command.Dispose();
         }
 
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
         public void Dispose()
         {
             Close();
