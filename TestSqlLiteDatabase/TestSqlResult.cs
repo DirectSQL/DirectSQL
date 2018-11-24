@@ -49,20 +49,14 @@ namespace TestSqlLiteDatabase
             {
                 CreateTableForTest(conn);
 
-                Database.ExecuteNonQuery(
-                    "insert into TEST_TABLE(TEST_COL1,TEST_COL2) " +
-                    "VALUES(@testVal1,@testVal2)",
-                    new (string, object)[] {
-                            ("@testVal1","testValue"),
-                            ("testVal2",123) },
-                    conn,
-                    tran);
+                InsertDataForTest(conn, tran);
 
                 Database.Query(
-                    "select TEST_COL1,TEST_COL2 from TEST_TABLE", 
-                    conn, 
-                    tran, 
-                    (result) => {
+                    "select TEST_COL1,TEST_COL2 from TEST_TABLE",
+                    conn,
+                    tran,
+                    (result) =>
+                    {
                         result.Next();
                         var fieldNames = result.ResultFields;
                         Assert.AreEqual(fieldNames[0], "TEST_COL1");
@@ -72,6 +66,46 @@ namespace TestSqlLiteDatabase
             });
         }
 
+        [TestMethod]
+        public void TestNoCurrentRow()
+        {
+            var db = new SqlLiteDatabase("Data Source=:memory:");
+            db.Process((conn, tran) =>
+            {
+                CreateTableForTest(conn);
+                InsertDataForTest(conn, tran);
+
+                Database.Query(
+                    "select TEST_COL1,TEST_COL2 from TEST_TABLE",
+                    conn,
+                    tran,
+                    (result) =>
+                    {
+                        //result.Next(); // Acutually this operation was needed.
+                        Assert.ThrowsException<InvalidOperationException>(() =>
+                        {
+                            var failedToRead = result.ResultValues;
+                        });
+
+                        result.Next();
+
+                        var resultValues = result.ResultValues;
+                        Assert.AreEqual(resultValues.TEST_COL1, "testValue");
+                        Assert.AreEqual(resultValues.TEST_COL2, 123);
+
+                        result.Next();
+
+                        Assert.ThrowsException<InvalidOperationException>(() =>
+                        {
+                            var failedToRead = result.ResultValues; //now empty row
+                        });
+
+                    }
+                );
+
+            });
+
+        }
 
         private static void CreateTableForTest(IDbConnection connection)
         {
@@ -87,6 +121,19 @@ namespace TestSqlLiteDatabase
                 command.ExecuteNonQuery();
 
             }
+        }
+
+        private static void InsertDataForTest(IDbConnection conn, IDbTransaction tran)
+        {
+            Database.ExecuteNonQuery(
+                "insert into TEST_TABLE(TEST_COL1,TEST_COL2) " +
+                "VALUES(@testVal1,@testVal2)",
+                new (string, object)[] {
+                    ("@testVal1","testValue"),
+                    ("testVal2",123)
+                },
+                conn,
+                tran);
         }
 
 
