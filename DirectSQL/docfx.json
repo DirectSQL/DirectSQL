@@ -6,7 +6,7 @@
           "files": [
             "**.csproj"
           ],
-          "src": "C:\\dev\\DirectSQL\\DirectSQL\\DirectSQL"
+          "src": "./"
         }
       ],
       "dest": "doc/api",
