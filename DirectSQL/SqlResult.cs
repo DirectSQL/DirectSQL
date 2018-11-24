@@ -43,6 +43,18 @@ namespace DirectSQL
         }
 
         /// <summary>
+        /// Sql
+        /// </summary>
+        /// <remarks>CommandText of command</remarks>
+        public String Sql
+        {
+            get
+            {
+                return _command.CommandText;
+            }
+        }
+
+        /// <summary>
         /// Fields in result
         /// </summary>
         public ImmutableArray<String> ResultFields
