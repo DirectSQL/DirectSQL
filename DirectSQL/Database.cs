@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DirectSQL
 {
@@ -130,6 +131,7 @@ namespace DirectSQL
             }
         }
 
+
         /// <summary>
         /// Execute a sql like update / insert
         /// </summary>
@@ -143,6 +145,30 @@ namespace DirectSQL
             IDbTransaction transaction)
         {
             return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
+        }
+
+
+        /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <remarks>
+        /// Formattable string is handled as sql with bind parameters
+        /// </remarks>
+        /// <param name="sql">sql to execute in formattable string</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>affected row count</returns>
+        public static int ExecuteFormattableNonQuery(
+            FormattableString sql,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            var sqlAndParams = ExtractSqlAndParam(sql);
+            return ExecuteNonQuery(
+                sqlAndParams.sql,
+                sqlAndParams.parameters,
+                connection,
+                transaction);
         }
 
 
@@ -178,12 +204,28 @@ namespace DirectSQL
             using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
-
                 command.CommandText = sql;
                 SetParameters(command, parameters);
 
                 return command.ExecuteScalar();
             }
+        }
+
+
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteFormattableScalar(
+            FormattableString sql,
+            IDbConnection connection,
+            IDbTransaction transaction)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            return ExecuteScalar(extracted.sql, extracted.parameters, connection, transaction);
         }
 
 
@@ -225,6 +267,25 @@ namespace DirectSQL
         {
             Query(sql, new (String,object)[0],connection,transaction, readResult);
         }
+
+
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="transaction">a transaction to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
+        public static void QueryFormattable(
+            FormattableString sql,
+            IDbConnection connection,
+            IDbTransaction transaction,
+            ReadSqlResult readResult)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            Query(extracted.sql, extracted.parameters, connection, transaction, readResult);
+        }
+
 
         /// <summary>
         /// Bind parameters to a command of sql
@@ -288,6 +349,22 @@ namespace DirectSQL
             }
         }
 
+        private static(String sql, (String,Object)[] parameters) ExtractSqlAndParam(FormattableString sqlFormattableString)
+        {
+            var paramNames =
+                Enumerable.Range(0, sqlFormattableString.ArgumentCount)
+                .Select(index => $"@{index}")
+                .ToArray();
+
+            return (String.Format(sqlFormattableString.Format, paramNames), //select * from TBL where COL = @1
+                    Enumerable.Range(0, sqlFormattableString.ArgumentCount)
+                    .Select((index) =>
+                        (paramNames[index],sqlFormattableString.GetArgument(index))
+                    )
+                    .ToArray() // { ("@1",value1) }
+            );                
+
+        }
 
     }
 }
