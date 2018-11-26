@@ -6,6 +6,7 @@ using System.Dynamic;
 
 namespace DirectSQL
 {
+
     /// <summary>
     /// Object to get result of SQL
     /// </summary>
@@ -80,6 +81,18 @@ namespace DirectSQL
                 return _resultValues;
             }
         }
+
+        /// <summary>
+        /// Result object of type T
+        /// </summary>
+        /// <typeparam name="T">Type of result object</typeparam>
+        /// <param name="convert">convert from dynamic to T</param>
+        /// <returns>result object</returns>
+        /// <remarks>dynamic object is same as ResultValues</remarks>
+        public T ResultObject<T>(Func<dynamic,T> convert){
+            return convert(ResultValues);
+        }
+
 
         /// <summary>
         /// Result values as an array of tuples

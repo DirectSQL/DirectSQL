@@ -107,6 +107,41 @@ namespace TestSqlLiteDatabase
 
         }
 
+
+        [TestMethod]
+        public void TestResultObject()
+        {
+            var db = new SqlLiteDatabase("Data Source=:memory:");
+            db.Process((conn, tran) =>
+            {
+                CreateTableForTest(conn);
+
+                InsertDataForTest(conn, tran);
+
+                Database.Query(
+                    "select TEST_COL1,TEST_COL2 from TEST_TABLE",
+                    conn,
+                    tran,
+                    (result) =>
+                    {
+                        result.Next();
+                        var resultObject =
+                            result.ResultObject(
+                                (original) => new SampleObject {
+                                    Val1 = original.TEST_COL1,
+                                    Val2 = original.TEST_COL2
+                                }
+                            );
+
+                        Assert.AreEqual(resultObject.Val1, "testValue");
+                        Assert.AreEqual(resultObject.Val2, 123);
+
+                    });
+
+            });
+        }
+
+
         private static void CreateTableForTest(IDbConnection connection)
         {
             using (var command = connection.CreateCommand())
@@ -134,6 +169,12 @@ namespace TestSqlLiteDatabase
                 },
                 conn,
                 tran);
+        }
+
+        public class SampleObject
+        {
+            public String Val1 { get; set; }
+            public long Val2 { get; set; }
         }
 
 
