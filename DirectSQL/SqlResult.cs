@@ -25,7 +25,7 @@ namespace DirectSQL
         /// <summary>
         /// variable not to execute not needed initialization
         /// </summary>
-        private bool _allowInitlialize;
+        private bool _allowInitialize;
 
         /// <summary>
         /// Reader in ADO.NET
@@ -144,7 +144,7 @@ namespace DirectSQL
 
             _command.Transaction = transaction;
 
-            _allowInitlialize = true;
+            _allowInitialize = true;
 
         }
 
@@ -158,7 +158,7 @@ namespace DirectSQL
             _resultValues = null;
             _resultTuples = null;
 
-            _allowInitlialize = true;
+            _allowInitialize = true;
 
             return _reader.Read();
 
@@ -167,13 +167,13 @@ namespace DirectSQL
 
         internal void Init()
         {
-            if (_allowInitlialize)
+            if (_allowInitialize)
             {
                 if (_reader != null)
                     _reader.Close();
 
                 _reader = _command.ExecuteReader();
-                _allowInitlialize = false;
+                _allowInitialize = false;
             }
         }
 
