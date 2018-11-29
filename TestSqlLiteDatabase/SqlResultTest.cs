@@ -187,6 +187,17 @@ namespace TestSqlLiteDatabase
 
                         Assert.AreEqual(123, sum);
 
+
+                        InsertDataForTest(conn, tran);
+
+                        var sum2 =
+                            result.AsEnumerable<int>(
+                                (original) => (int)original.TEST_COL2
+                            ).Sum();
+
+                        Assert.AreEqual(123 * 2, sum2);
+
+
                     });
 
             });
