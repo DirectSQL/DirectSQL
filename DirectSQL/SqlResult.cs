@@ -252,12 +252,13 @@ namespace DirectSQL
 
             public IEnumerator<T> GetEnumerator()
             {
+                _sqlResult.Init();
                 return new Enumerator<T>(_sqlResult, _convert);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return new Enumerator<T>(_sqlResult, _convert);
+                return GetEnumerator();
             }
 
         }

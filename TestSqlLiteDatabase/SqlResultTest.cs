@@ -173,6 +173,20 @@ namespace TestSqlLiteDatabase
                         Assert.AreEqual(array[0].Val2, 123);
                         Assert.AreEqual(array.Length, 1);
 
+                        var list =
+                            result.AsEnumerable<dynamic>(
+                                (original) => original
+                            ).ToList();
+
+                        Assert.AreEqual(1, list.Count);
+
+                        var sum =
+                            result.AsEnumerable<int>(
+                                (original) => (int) original.TEST_COL2
+                            ).Sum();
+
+                        Assert.AreEqual(123, sum);
+
                     });
 
             });
