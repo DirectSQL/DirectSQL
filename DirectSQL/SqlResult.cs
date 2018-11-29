@@ -23,6 +23,11 @@ namespace DirectSQL
         private (String name, Object value)[] _resultTuples;
 
         /// <summary>
+        /// variable not to execute not needed initialization
+        /// </summary>
+        private bool _allowInitlialize;
+
+        /// <summary>
         /// Reader in ADO.NET
         /// </summary>
         public IDataReader Reader
@@ -139,6 +144,8 @@ namespace DirectSQL
 
             _command.Transaction = transaction;
 
+            _allowInitlialize = true;
+
         }
 
 
@@ -151,6 +158,8 @@ namespace DirectSQL
             _resultValues = null;
             _resultTuples = null;
 
+            _allowInitlialize = true;
+
             return _reader.Read();
 
         }
@@ -158,11 +167,14 @@ namespace DirectSQL
 
         internal void Init()
         {
-            if (_reader != null)
-                _reader.Close();
+            if (_allowInitlialize)
+            {
+                if (_reader != null)
+                    _reader.Close();
 
-            _reader = _command.ExecuteReader();
-
+                _reader = _command.ExecuteReader();
+                _allowInitlialize = false;
+            }
         }
 
         private void InitResultFields()
