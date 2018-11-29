@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
@@ -95,6 +96,18 @@ namespace DirectSQL
 
 
         /// <summary>
+        /// Return enumerable of SqlResult
+        /// </summary>
+        /// <typeparam name="T">Type of object to be enumerated</typeparam>
+        /// <param name="convert">Convert from dynamic to T</param>
+        /// <returns>Object which enumerate result of SqlResult</returns>
+        public IEnumerable<T> AsEnumerable<T>(Func<dynamic,T> convert)
+        {
+            return new Enumerable<T>(this, convert);
+        }
+
+
+        /// <summary>
         /// Result values as an array of tuples
         /// </summary>
         /// <remarks>
@@ -145,7 +158,11 @@ namespace DirectSQL
 
         internal void Init()
         {
+            if (_reader != null)
+                _reader.Close();
+
             _reader = _command.ExecuteReader();
+
         }
 
         private void InitResultFields()
@@ -220,5 +237,62 @@ namespace DirectSQL
         {
             Close();
         }
+
+
+        private class Enumerable<T> : IEnumerable<T>
+        {
+
+            private SqlResult _sqlResult;
+            private Func<dynamic, T> _convert;
+
+            internal Enumerable(SqlResult sqlResult,Func<dynamic, T> converter){
+                _sqlResult = sqlResult;
+                _convert = converter;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return new Enumerator<T>(_sqlResult, _convert);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return new Enumerator<T>(_sqlResult, _convert);
+            }
+
+        }
+
+        private class Enumerator<T> : IEnumerator<T>, IEnumerator
+        {
+
+            private SqlResult _sqlResult;
+            private Func<dynamic, T> _convert;
+
+            internal Enumerator(SqlResult sqlResult, Func<dynamic, T> converter){
+                _sqlResult = sqlResult;
+                _convert = converter;
+            }
+
+            public T Current => _sqlResult.ResultObject<T>(_convert);
+
+            object IEnumerator.Current => _sqlResult.ResultObject<T>(_convert);
+
+            public void Dispose()
+            {
+                _sqlResult = null;
+            }
+
+            public bool MoveNext()
+            {
+                return _sqlResult.Next();
+            }
+
+            public void Reset()
+            {
+                _sqlResult.Init();
+            }
+        }
+
+
     }
 }

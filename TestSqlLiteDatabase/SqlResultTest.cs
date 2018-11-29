@@ -8,6 +8,8 @@ using DirectSQL;
 using DirectSQL.SqlLite;
 using System.Data;
 
+using System.Linq;
+
 namespace TestSqlLiteDatabase
 {
     [TestClass]
@@ -135,6 +137,41 @@ namespace TestSqlLiteDatabase
 
                         Assert.AreEqual(resultObject.Val1, "testValue");
                         Assert.AreEqual(resultObject.Val2, 123);
+
+                    });
+
+            });
+        }
+
+
+        [TestMethod]
+        public void TestEnumerable()
+        {
+            var db = new SqlLiteDatabase("Data Source=:memory:");
+            db.Process((conn, tran) =>
+            {
+                CreateTableForTest(conn);
+
+                InsertDataForTest(conn, tran);
+
+                Database.Query(
+                    "select TEST_COL1,TEST_COL2 from TEST_TABLE",
+                    conn,
+                    tran,
+                    (result) =>
+                    {
+                        var array =
+                            result.AsEnumerable<SampleObject>(
+                                (original) => new SampleObject
+                                {
+                                    Val1 = original.TEST_COL1,
+                                    Val2 = original.TEST_COL2
+                                }
+                            ).ToArray();
+
+                        Assert.AreEqual(array[0].Val1, "testValue");
+                        Assert.AreEqual(array[0].Val2, 123);
+                        Assert.AreEqual(array.Length, 1);
 
                     });
 
