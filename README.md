@@ -1,5 +1,6 @@
 # DirectSQL
-![build on master](https://7k8m.visualstudio.com/DirectSQL/_apis/build/status/DirectSQL-.NET-CI)
+![build on master](https://7k8m.visualstudio.com/DirectSQL/_apis/build/status/DirectSQL-.NET-CI)<br/>
+![Ready on NuGet](https://img.shields.io/nuget/v/DirectSQL.svg?style=flat)
 
 Execute SQL directly !
 
@@ -17,7 +18,6 @@ Now, this library has supporting code for next DBMS
 * DB2
 * MySql
 
-Referece is [here](https://7k8m.github.io/DirectSQL.Document/doc/api/index.html).<br/>
-You can get library from [NuGet](https://www.nuget.org/packages/DirectSQL/) also.
+Referece is [here](https://7k8m.github.io/DirectSQL.Document/doc/api/index.html).
 
 Please try :smile:.
