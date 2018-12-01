@@ -18,5 +18,6 @@ Now, this library has supporting code for next DBMS
 * MySql
 
 Referece is [here](https://7k8m.github.io/DirectSQL.Document/doc/api/index.html).
+You can get library from [NuGet](https://www.nuget.org/packages/DirectSQL/) also.
 
 Please try :smile:.
