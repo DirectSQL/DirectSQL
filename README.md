@@ -1,5 +1,5 @@
 # DirectSQL
-![build on master](https://7k8m.visualstudio.com/DirectSQL/_apis/build/status/DirectSQL-.NET-CI)<br/>
+[![build on master](https://7k8m.visualstudio.com/DirectSQL/_apis/build/status/DirectSQL-.NET-CI)](https://7k8m.visualstudio.com/DirectSQL/_build?definitionId=1)<br/>
 [![Ready on NuGet](https://img.shields.io/nuget/v/DirectSQL.svg?style=flat)](http://NuGet.org/packages/DirectSQL/)
 
 Execute SQL directly !
