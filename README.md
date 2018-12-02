@@ -18,6 +18,6 @@ Now, this library has supporting code for next DBMS
 * DB2
 * MySql
 
-Referece is [here](https://7k8m.github.io/DirectSQL.Document/doc/).
+Documentation is [here](https://7k8m.github.io/DirectSQL.Document/doc/).
 
 Please try :smile:.
