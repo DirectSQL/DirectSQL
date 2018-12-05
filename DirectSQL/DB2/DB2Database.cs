@@ -7,7 +7,7 @@ using IBM.Data.DB2.Core;
 
 namespace DirectSQL.DB2
 {
-    public class DB2Database : Database
+    public class DB2Database : Database<DB2Connection, DB2Transaction, DB2Command, DB2DataReader, DB2Parameter>
     {
 
         readonly private String _db2ConnectionString;
@@ -17,14 +17,9 @@ namespace DirectSQL.DB2
             _db2ConnectionString = db2ConnectionString;
         }
 
-        protected override IDbConnection CreateConnection()
+        protected override DB2Connection CreateConnection()
         {
             return new DB2Connection ( _db2ConnectionString );
-        }
-
-        public static DB2Parameter CreateDB2Parameter(string name, object value)
-        {
-            return new DB2Parameter(name, value);
         }
 
     }

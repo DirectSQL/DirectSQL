@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace DirectSQL.MySql
 {
-    public class MySqlDatabase : Database
+    public class MySqlDatabase : Database<MySqlConnection, MySqlTransaction, MySqlCommand, MySqlDataReader, MySqlParameter>
     {
 
         readonly private String _mySqlConnectionString;
@@ -17,16 +17,11 @@ namespace DirectSQL.MySql
             _mySqlConnectionString = mySqlConnectionString;
         }
 
-        protected override IDbConnection CreateConnection()
+        protected override MySqlConnection CreateConnection()
         {
             return new MySqlConnection( _mySqlConnectionString );
         }
 
-
-        public static MySqlParameter CreateMySqlParameter(string name, object value)
-        {
-            return new MySqlParameter(name, value);
-        }
 
     }
 }

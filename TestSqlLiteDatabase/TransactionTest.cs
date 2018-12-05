@@ -7,6 +7,7 @@ using System.Data;
 using DirectSQL;
 using DirectSQL.SqlLite;
 using System.Threading.Tasks;
+using System.Data.SQLite;
 
 namespace TestSqlLiteDatabase
 {
@@ -22,14 +23,14 @@ namespace TestSqlLiteDatabase
             db.Process((connection) => {
                 CreateTableForTest(connection);
 
-                Database.Transaction(connection,
+                SqlLiteDatabase.Transaction(connection,
                     (conn, tran) => {
                         InsertDataForTest(conn, tran);
                         tran.Rollback();
                     }
                 );
 
-                Database.Transaction(connection,
+                SqlLiteDatabase.Transaction(connection,
                     (conn, tran) =>
                     {
                         AssertDataCount(0, conn, tran);
@@ -39,7 +40,7 @@ namespace TestSqlLiteDatabase
                     }
                 );
 
-                Database.Transaction(connection,
+                SqlLiteDatabase.Transaction(connection,
                     (conn, tran) =>
                     {
                         AssertDataCount(1, conn, tran);
@@ -60,7 +61,7 @@ namespace TestSqlLiteDatabase
 
                 CreateTableForTest(connection);
 
-                await Database.TransactionAsync(connection,
+                await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) => {
                         await Task.Delay(1);
                         InsertDataForTest(conn, tran);
@@ -68,7 +69,7 @@ namespace TestSqlLiteDatabase
                     }
                 );
 
-                await Database.TransactionAsync(connection,
+                await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) =>
                     {
                         await Task.Delay(1);
@@ -79,7 +80,7 @@ namespace TestSqlLiteDatabase
                     }
                 );
 
-                await Database.TransactionAsync(connection,
+                await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) =>
                     {
                         await Task.Delay(1);
@@ -91,10 +92,10 @@ namespace TestSqlLiteDatabase
         }
 
 
-        private static void AssertDataCount(long expectedCount,IDbConnection conn, IDbTransaction tran)
+        private static void AssertDataCount(long expectedCount,SQLiteConnection conn, SQLiteTransaction tran)
         {
             Assert.AreEqual(
-                Database.ExecuteScalar("select count(*) from TEST_TABLE", conn, tran),
+                SqlLiteDatabase.ExecuteScalar("select count(*) from TEST_TABLE", conn, tran),
                 expectedCount);
         }
 
@@ -113,9 +114,9 @@ namespace TestSqlLiteDatabase
             }
         }
 
-        private static void InsertDataForTest(IDbConnection conn, IDbTransaction tran)
+        private static void InsertDataForTest(SQLiteConnection conn, SQLiteTransaction tran)
         {
-            Database.ExecuteNonQuery(
+            SqlLiteDatabase.ExecuteNonQuery(
                 "insert into TEST_TABLE(TEST_COL1) " +
                 "VALUES(@testVal1)",
                 new (string, object)[] {

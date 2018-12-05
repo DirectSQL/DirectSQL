@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace DirectSQL.Npgsql
 {
-    public class NpgsqlDatabase : Database
+    public class NpgsqlDatabase : Database<NpgsqlConnection, NpgsqlTransaction, NpgsqlCommand, NpgsqlDataReader, NpgsqlParameter>
     {
 
         readonly private String _npgsqlConnectionString;
@@ -17,15 +17,9 @@ namespace DirectSQL.Npgsql
             _npgsqlConnectionString = npgsqlConnectionString;
         }
 
-        protected override IDbConnection CreateConnection()
+        protected override NpgsqlConnection CreateConnection()
         {
             return new NpgsqlConnection( _npgsqlConnectionString );
-        }
-
-
-        public static NpgsqlParameter CreateNpgsqlParameter(string name, object value)
-        {
-            return new NpgsqlParameter(name, value);
         }
 
     }

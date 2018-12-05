@@ -7,7 +7,7 @@ using System.Data.SQLite;
 
 namespace DirectSQL.SqlLite
 {
-    public class SqlLiteDatabase : Database
+    public class SqlLiteDatabase : Database<SQLiteConnection, SQLiteTransaction, SQLiteCommand, SQLiteDataReader, SQLiteParameter>
     {
 
         readonly private String _sqlLiteConnectionString;
@@ -17,16 +17,11 @@ namespace DirectSQL.SqlLite
             _sqlLiteConnectionString = sqlLiteConnectionString;
         }
 
-        protected override IDbConnection CreateConnection()
+        protected override SQLiteConnection CreateConnection()
         {
             return new SQLiteConnection( _sqlLiteConnectionString );
         }
 
-
-        public static SQLiteParameter CreateSQLiteParameter(string name, object value)
-        {
-            return new SQLiteParameter(name, value);
-        }
 
     }
 }

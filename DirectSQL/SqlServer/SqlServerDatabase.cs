@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace DirectSQL.SqlServer
 {
-    public class SqlServerDatabase : Database
+    public class SqlServerDatabase : Database<SqlConnection, SqlTransaction, SqlCommand, SqlDataReader, SqlParameter>
     {
 
         readonly private String _sqlServerConnectionString;
@@ -17,14 +17,9 @@ namespace DirectSQL.SqlServer
             _sqlServerConnectionString = sqlServerConnectionString;
         }
 
-        protected override IDbConnection CreateConnection()
+        protected override SqlConnection CreateConnection()
         {
             return new SqlConnection ( _sqlServerConnectionString );
-        }
-
-        public static SqlParameter CreateSqlParameter(string name, object value)
-        {
-            return new SqlParameter(name, value);
         }
 
     }

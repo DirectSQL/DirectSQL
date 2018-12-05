@@ -9,6 +9,7 @@ using DirectSQL.SqlLite;
 using System.Data;
 
 using System.Linq;
+using System.Data.SQLite;
 
 namespace TestSqlLiteDatabase
 {
@@ -22,7 +23,7 @@ namespace TestSqlLiteDatabase
             db.Process((conn, tran) =>
             {
                 var sql = "values(1,2,3)";
-                Database.Query(sql, conn, tran, (result) => {
+                SqlLiteDatabase.Query(sql, conn, tran, (result) => {
                     Assert.AreEqual(sql, result.Sql);
                 });
             });
@@ -35,7 +36,7 @@ namespace TestSqlLiteDatabase
             db.Process((conn, tran) =>
             {
                 var sql = "values(1,2,3)";
-                Database.Query(sql, conn, tran, (result) => {
+                SqlLiteDatabase.Query(sql, conn, tran, (result) => {
                     result.Next();
                     var fieldNames = result.ResultFields;
                 });
@@ -53,7 +54,7 @@ namespace TestSqlLiteDatabase
 
                 InsertDataForTest(conn, tran);
 
-                Database.Query(
+                SqlLiteDatabase.Query(
                     "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                     conn,
                     tran,
@@ -77,7 +78,7 @@ namespace TestSqlLiteDatabase
                 CreateTableForTest(conn);
                 InsertDataForTest(conn, tran);
 
-                Database.Query(
+                SqlLiteDatabase.Query(
                     "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                     conn,
                     tran,
@@ -120,7 +121,7 @@ namespace TestSqlLiteDatabase
 
                 InsertDataForTest(conn, tran);
 
-                Database.Query(
+                SqlLiteDatabase.Query(
                     "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                     conn,
                     tran,
@@ -154,7 +155,7 @@ namespace TestSqlLiteDatabase
 
                 InsertDataForTest(conn, tran);
 
-                Database.Query(
+                SqlLiteDatabase.Query(
                     "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                     conn,
                     tran,
@@ -220,9 +221,9 @@ namespace TestSqlLiteDatabase
             }
         }
 
-        private static void InsertDataForTest(IDbConnection conn, IDbTransaction tran)
+        private static void InsertDataForTest(SQLiteConnection conn, SQLiteTransaction tran)
         {
-            Database.ExecuteNonQuery(
+            SqlLiteDatabase.ExecuteNonQuery(
                 "insert into TEST_TABLE(TEST_COL1,TEST_COL2) " +
                 "VALUES(@testVal1,@testVal2)",
                 new (string, object)[] {

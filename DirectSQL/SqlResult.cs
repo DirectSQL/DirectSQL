@@ -12,10 +12,10 @@ namespace DirectSQL
     /// Object to get result of SQL
     /// </summary>
     /// <remarks>This stands for cursor in RDB</remarks>
-    public class SqlResult:IDisposable
+    public class SqlResult<R,CMD,T,C,P>:IDisposable where R:IDataReader where CMD:IDbCommand where T : IDbTransaction where C : IDbConnection where P : IDataParameter, new()
     {
-        private IDataReader _reader;
-        private IDbCommand _command;
+        private R _reader;
+        private CMD _command;
 
         private ImmutableArray<String> _resultFields;
 
@@ -95,7 +95,7 @@ namespace DirectSQL
         /// <param name="convert">convert from dynamic to T</param>
         /// <returns>result object</returns>
         /// <remarks>dynamic object is same as ResultValues</remarks>
-        public T ResultObject<T>(Func<dynamic,T> convert){
+        public TP ResultObject<TP>(Func<dynamic,TP> convert){
             return convert(ResultValues);
         }
 
@@ -106,9 +106,9 @@ namespace DirectSQL
         /// <typeparam name="T">Type of object to be enumerated</typeparam>
         /// <param name="convert">Convert from dynamic to T</param>
         /// <returns>Object which enumerate result of SqlResult</returns>
-        public IEnumerable<T> AsEnumerable<T>(Func<dynamic,T> convert)
+        public IEnumerable<TP> AsEnumerable<TP>(Func<dynamic,TP> convert)
         {
-            return new Enumerable<T>(this, convert);
+            return new Enumerable<TP>(this, convert);
         }
 
 
@@ -134,13 +134,13 @@ namespace DirectSQL
         internal SqlResult ( 
             String sql, 
             (String name,object value)[] parameters, 
-            IDbConnection connection, 
-            IDbTransaction transaction)
+            C connection, 
+            T transaction)
         {
-            _command = connection.CreateCommand();
+            _command = (CMD) connection.CreateCommand();
 
             _command.CommandText = sql;
-            Database.SetParameters(_command, parameters);
+            Database<C,T,CMD,R,P>.SetParameters(_command, parameters);
 
             _command.Transaction = transaction;
 
@@ -172,7 +172,7 @@ namespace DirectSQL
                 if (_reader != null)
                     _reader.Close();
 
-                _reader = _command.ExecuteReader();
+                _reader = (R) _command.ExecuteReader();
                 _allowInitialize = false;
             }
         }
@@ -201,7 +201,7 @@ namespace DirectSQL
 
         }
 
-        private static ExpandoObject CreateResultValue(IDataReader reader, ImmutableArray<String> fields)
+        private static ExpandoObject CreateResultValue(R reader, ImmutableArray<String> fields)
         {
             var values = new ExpandoObject();
 
@@ -222,7 +222,7 @@ namespace DirectSQL
             _resultTuples = CreateResultTuples(_reader, ResultFields);
         }
 
-        private static (string, object)[] CreateResultTuples(IDataReader reader, ImmutableArray<string> resultFields)
+        private static (string, object)[] CreateResultTuples(R reader, ImmutableArray<string> resultFields)
         {
             var array = new (String, object)[resultFields.Length];
             for(int i = 0; i < resultFields.Length; i ++)
@@ -251,21 +251,21 @@ namespace DirectSQL
         }
 
 
-        private class Enumerable<T> : IEnumerable<T>
+        private class Enumerable<TP> : IEnumerable<TP> 
         {
 
-            private SqlResult _sqlResult;
-            private Func<dynamic, T> _convert;
+            private SqlResult<R,CMD,T,C,P> _sqlResult;
+            private Func<dynamic, TP> _convert;
 
-            internal Enumerable(SqlResult sqlResult,Func<dynamic, T> converter){
+            internal Enumerable(SqlResult<R,CMD,T,C, P> sqlResult,Func<dynamic, TP> converter){
                 _sqlResult = sqlResult;
                 _convert = converter;
             }
 
-            public IEnumerator<T> GetEnumerator()
+            public IEnumerator<TP> GetEnumerator()
             {
                 _sqlResult.Init();
-                return new Enumerator<T>(_sqlResult, _convert);
+                return new Enumerator<TP>(_sqlResult, _convert);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
@@ -275,20 +275,20 @@ namespace DirectSQL
 
         }
 
-        private class Enumerator<T> : IEnumerator<T>, IEnumerator
+        private class Enumerator<TP> : IEnumerator<TP>, IEnumerator 
         {
 
-            private SqlResult _sqlResult;
-            private Func<dynamic, T> _convert;
+            private SqlResult<R,CMD,T,C,P> _sqlResult;
+            private Func<dynamic, TP> _convert;
 
-            internal Enumerator(SqlResult sqlResult, Func<dynamic, T> converter){
+            internal Enumerator(SqlResult<R,CMD,T,C,P> sqlResult, Func<dynamic, TP> converter){
                 _sqlResult = sqlResult;
                 _convert = converter;
             }
 
-            public T Current => _sqlResult.ResultObject<T>(_convert);
+            public TP Current => _sqlResult.ResultObject<TP>(_convert);
 
-            object IEnumerator.Current => _sqlResult.ResultObject<T>(_convert);
+            object IEnumerator.Current => _sqlResult.ResultObject<TP>(_convert);
 
             public void Dispose()
             {

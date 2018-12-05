@@ -11,7 +11,7 @@ namespace DirectSQL
     /// </summary>
     /// <param name="connection">a connection</param>
     /// <param name="transaction">a transaction</param>
-    public delegate void SqlExecution(IDbConnection connection, IDbTransaction transaction);
+    public delegate void SqlExecution<C,T>(C connection, T transaction) where C:IDbConnection where T : IDbTransaction;
 
     /// <summary>
     /// Execute a sql asynchronously with a connection and a transaction.
@@ -19,31 +19,31 @@ namespace DirectSQL
     /// <param name="connection">a connection</param>
     /// <param name="transaction">a transaction</param>
     /// <returns></returns>
-    public delegate Task AsyncSqlExecution(IDbConnection connection, IDbTransaction transaction);
+    public delegate Task AsyncSqlExecution<C,T>(C connection, T transaction) where C : IDbConnection where T : IDbTransaction;
 
     /// <summary>
     /// Do something with a connection
     /// </summary>
     /// <param name="connection">a connection</param>
-    public delegate void ConnectExecution(IDbConnection connection);
+    public delegate void ConnectExecution<C>(C connection) where C : IDbConnection;
 
     /// <summary>
     /// Do something asynchronously with a connection.
     /// </summary>
     /// <param name="connection">a connection</param>
     /// <returns></returns>
-    public delegate Task AsyncConnectExecution(IDbConnection connection);
+    public delegate Task AsyncConnectExecution<C>(C connection) where C : IDbConnection;
 
     /// <summary>
     /// Read sql result.
     /// </summary>
     /// <param name="result">result to be read</param>
-    public delegate void ReadSqlResult(SqlResult result);
+    public delegate void ReadSqlResult<R,CMD,T,C,P>(SqlResult<R,CMD,T,C,P> result)  where CMD : IDbCommand where R : IDataReader where T : IDbTransaction where C : IDbConnection where P:IDataParameter,new();
 
     /// <summary>
     /// Database class is entry point of DirectSQL library.
     /// </summary>
-    public abstract class Database
+    public abstract class Database<C,T,CMD,R,P> where C : IDbConnection where T : IDbTransaction where CMD : IDbCommand where R : IDataReader where P:IDataParameter,new()
     {
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace DirectSQL
         /// </summary>
         /// <param name="execute">execution with a connection</param>
         /// <returns></returns>
-        public async Task ProcessAsync(AsyncConnectExecution execute)
+        public async Task ProcessAsync(AsyncConnectExecution<C> execute)
         {
             using (var connection = CreateConnection())
             {
@@ -65,7 +65,7 @@ namespace DirectSQL
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
         /// <returns></returns>
-        public async Task ProcessAsync(AsyncSqlExecution execute)
+        public async Task ProcessAsync(AsyncSqlExecution<C,T> execute)
         {
 
            await ProcessAsync(async (connection) =>
@@ -79,7 +79,7 @@ namespace DirectSQL
         /// Synchronous process with a connection
         /// </summary>
         /// <param name="execute">execution with a connection</param>
-        public void Process(ConnectExecution execute)
+        public void Process(ConnectExecution<C> execute)
         {
             using (var connection = CreateConnection())
             {
@@ -92,7 +92,7 @@ namespace DirectSQL
         /// Synchronous process with a connection and a transaction
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
-        public void Process(SqlExecution execute)
+        public void Process(SqlExecution<C,T> execute)
         {
             Process((connection) =>
             {
@@ -104,7 +104,7 @@ namespace DirectSQL
         /// Sub class implements actual method to create a connection.
         /// </summary>
         /// <returns></returns>
-        protected abstract IDbConnection CreateConnection();
+        protected abstract C CreateConnection();
 
         /// <summary>
         /// Execute a sql like update / insert
@@ -117,10 +117,10 @@ namespace DirectSQL
         public static int ExecuteNonQuery(
             string sql,
             (String name, object value)[] parameters,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
-            using( var command = connection.CreateCommand())
+            using( var command = (CMD) connection.CreateCommand())
             {
                 command.Transaction = transaction;
 
@@ -141,8 +141,8 @@ namespace DirectSQL
         /// <returns>affected row count</returns>
         public static int ExecuteNonQuery(
             string sql,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
             return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
         }
@@ -160,8 +160,8 @@ namespace DirectSQL
         /// <returns>affected row count</returns>
         public static int ExecuteFormattableNonQuery(
             FormattableString sql,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
             var sqlAndParams = ExtractSqlAndParam(sql);
             return ExecuteNonQuery(
@@ -181,8 +181,8 @@ namespace DirectSQL
         /// <returns>result of sql</returns>
         public static object ExecuteScalar(
             string sql,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
             return ExecuteScalar(sql, new ValueTuple<String, object>[0], connection, transaction);
         }
@@ -198,10 +198,10 @@ namespace DirectSQL
         public static object ExecuteScalar(
             string sql,
             (String name, object value)[] parameters,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
-            using (var command = connection.CreateCommand())
+            using (var command = (CMD) connection.CreateCommand())
             {
                 command.Transaction = transaction;
                 command.CommandText = sql;
@@ -221,8 +221,8 @@ namespace DirectSQL
         /// <returns>result of sql</returns>
         public static object ExecuteFormattableScalar(
             FormattableString sql,
-            IDbConnection connection,
-            IDbTransaction transaction)
+            C connection,
+            T transaction)
         {
             var extracted = ExtractSqlAndParam(sql);
             return ExecuteScalar(extracted.sql, extracted.parameters, connection, transaction);
@@ -240,11 +240,11 @@ namespace DirectSQL
         public static void Query(
             string sql,
             (String name, object value)[] parameters,  
-            IDbConnection connection, 
-            IDbTransaction transaction,
-            ReadSqlResult readResult)
+            C connection, 
+            T transaction,
+            ReadSqlResult<R,CMD,T,C,P> readResult)
         {
-            using (var result = new SqlResult(sql,parameters,connection,transaction))
+            using (var result = new SqlResult<R,CMD,T,C,P>(sql,parameters,connection,transaction))
             {
                 result.Init();
                 readResult(result);
@@ -261,9 +261,9 @@ namespace DirectSQL
         /// <param name="readResult">function to read result of sql</param>
         public static void Query(
             string sql,
-            IDbConnection connection,
-            IDbTransaction transaction,
-            ReadSqlResult readResult)
+            C connection,
+            T transaction,
+            ReadSqlResult<R,CMD,T,C,P> readResult)
         {
             Query(sql, new (String,object)[0],connection,transaction, readResult);
         }
@@ -278,9 +278,9 @@ namespace DirectSQL
         /// <param name="readResult">function to read result of sql</param>
         public static void QueryFormattable(
             FormattableString sql,
-            IDbConnection connection,
-            IDbTransaction transaction,
-            ReadSqlResult readResult)
+            C connection,
+            T transaction,
+            ReadSqlResult<R,CMD,T,C,P>  readResult)
         {
             var extracted = ExtractSqlAndParam(sql);
             Query(extracted.sql, extracted.parameters, connection, transaction, readResult);
@@ -292,11 +292,11 @@ namespace DirectSQL
         /// </summary>
         /// <param name="command">command of sql</param>
         /// <param name="parameters">parameter values bound to sql</param>
-        internal static void SetParameters(IDbCommand command, (String name,object value)[] parameters)
+        internal static void SetParameters(CMD command, (String name,object value)[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)
             {
-                IDbDataParameter parameter = command.CreateParameter();
+                P parameter = (P) command.CreateParameter();
                 parameter.ParameterName = parameters[i].name;
                 parameter.Value = parameters[i].value;
 
@@ -310,9 +310,9 @@ namespace DirectSQL
         /// </summary>
         /// <param name="connection">connection to be used</param>
         /// <param name="execute">to be executed</param>
-        public static void Transaction(IDbConnection connection, SqlExecution execute)
+        public static void Transaction(C connection, SqlExecution<C,T> execute)
         {
-            using(var transaction = connection.BeginTransaction())
+            using(var transaction = (T) connection.BeginTransaction())
             {
                 try
                 {
@@ -333,9 +333,9 @@ namespace DirectSQL
         /// <param name="connection">connection to be used</param>
         /// <param name="execute">to be executed</param>
         /// <returns>A task stands for asynchronous execution</returns>
-        public static async Task TransactionAsync(IDbConnection connection, AsyncSqlExecution execute)
+        public static async Task TransactionAsync(C connection, AsyncSqlExecution<C,T> execute)
         {
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = (T) connection.BeginTransaction())
             {
                 try
                 {
@@ -364,6 +364,11 @@ namespace DirectSQL
                     .ToArray() // { ("@1",value1) }
             );                
 
+        }
+
+        public static P CreateParameter(string name, object value)
+        {
+            return new P() { ParameterName = name, Value = value };
         }
 
     }
