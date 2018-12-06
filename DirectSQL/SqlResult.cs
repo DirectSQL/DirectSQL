@@ -12,6 +12,11 @@ namespace DirectSQL
     /// Object to get result of SQL
     /// </summary>
     /// <remarks>This stands for cursor in RDB</remarks>
+    /// <typeparam name="R">Type of DataReader</typeparam>
+    /// <typeparam name="CMD">Type of DbCommand</typeparam>
+    /// <typeparam name="T">Type of Transaction</typeparam>
+    /// <typeparam name="C">Type of Connection</typeparam>
+    /// <typeparam name="P">Type of DataParameter</typeparam>
     public class SqlResult<R,CMD,T,C,P>:IDisposable where R:IDataReader where CMD:IDbCommand where T : IDbTransaction where C : IDbConnection where P : IDataParameter, new()
     {
         private R _reader;
@@ -91,7 +96,7 @@ namespace DirectSQL
         /// <summary>
         /// Result object of type T
         /// </summary>
-        /// <typeparam name="T">Type of result object</typeparam>
+        /// <typeparam name="TP">Type of result object</typeparam>
         /// <param name="convert">convert from dynamic to T</param>
         /// <returns>result object</returns>
         /// <remarks>dynamic object is same as ResultValues</remarks>
@@ -103,7 +108,7 @@ namespace DirectSQL
         /// <summary>
         /// Return enumerable of SqlResult
         /// </summary>
-        /// <typeparam name="T">Type of object to be enumerated</typeparam>
+        /// <typeparam name="TP">Type of object to be enumerated</typeparam>
         /// <param name="convert">Convert from dynamic to T</param>
         /// <returns>Object which enumerate result of SqlResult</returns>
         public IEnumerable<TP> AsEnumerable<TP>(Func<dynamic,TP> convert)
