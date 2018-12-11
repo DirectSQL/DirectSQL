@@ -11,10 +11,6 @@ This .NET library is very thin database framework on top of System.Data.</Descri
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.40.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="IBM.Data.DB2.Core" Version="1.2.2.100" />
     <PackageReference Include="MySql.Data" Version="8.0.13" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
