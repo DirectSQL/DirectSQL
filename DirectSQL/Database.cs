@@ -387,5 +387,18 @@ namespace DirectSQL
             return new P() { ParameterName = name, Value = value };
         }
 
+
+        public class SqlResult: DirectSQL.SqlResult<R,CMD,T,C,P>
+        {
+            internal SqlResult(
+                String sql,
+                (String name, object value)[] parameters,
+                C connection,
+                T transaction) : base( sql, parameters, connection, transaction )
+            {
+            }
+        }
+
+
     }
 }

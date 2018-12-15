@@ -256,6 +256,50 @@ namespace DirectSQL
         }
 
 
+        public static dynamic[] LoadSqlResult(
+            String sql,
+            (String name, object value)[] parameters,
+            C connection, 
+            T transaction)
+        {
+
+            var list = new List<dynamic>();
+
+            Database<C, T, CMD, R, P>.Query(
+                sql,
+                parameters,
+                connection,
+                transaction,
+                (result) => {
+
+
+
+                    while (result.Next())
+                    {
+                        list.Add(result.ResultValues);
+                    }
+
+                });
+
+            return list.ToArray();
+
+        }
+
+
+        public static dynamic[] LoadSqlResult(
+            String sql,
+            C connection,
+            T transaction)
+        {
+            return LoadSqlResult(
+                sql, 
+                new (String, object)[0], 
+                connection, 
+                transaction
+            );
+        }
+
+
         private class Enumerable<TP> : IEnumerable<TP> 
         {
 
