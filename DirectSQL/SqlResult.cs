@@ -182,6 +182,7 @@ namespace DirectSQL
             }
         }
 
+
         private void InitResultFields()
         {
             if (_resultFields != null)
@@ -206,6 +207,7 @@ namespace DirectSQL
 
         }
 
+
         private static ExpandoObject CreateResultValue(R reader, ImmutableArray<String> fields)
         {
             var values = new ExpandoObject();
@@ -227,6 +229,7 @@ namespace DirectSQL
             _resultTuples = CreateResultTuples(_reader, ResultFields);
         }
 
+
         private static (string, object)[] CreateResultTuples(R reader, ImmutableArray<string> resultFields)
         {
             var array = new (String, object)[resultFields.Length];
@@ -246,6 +249,7 @@ namespace DirectSQL
             if ( _command != null )
                 _command.Dispose();
         }
+
 
         /// <summary>
         /// Dispose resources.
@@ -271,8 +275,6 @@ namespace DirectSQL
                 connection,
                 transaction,
                 (result) => {
-
-
 
                     while (result.Next())
                     {
@@ -324,6 +326,7 @@ namespace DirectSQL
 
         }
 
+
         private class Enumerator<TP> : IEnumerator<TP>, IEnumerator 
         {
 
@@ -354,7 +357,6 @@ namespace DirectSQL
                 _sqlResult.Init();
             }
         }
-
 
     }
 }
