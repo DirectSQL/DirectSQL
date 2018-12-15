@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Data;
 using System.Dynamic;
+using System.Threading.Tasks;
 
 namespace DirectSQL
 {
@@ -284,6 +285,48 @@ namespace DirectSQL
                 });
 
             return list.ToArray();
+
+        }
+
+        public static async Task<dynamic[]> LoadSqlResultAsync(
+            String sql,
+            C connection,
+            T transaction)
+        {
+            return await LoadSqlResultAsync(sql, new (String, object)[0], connection, transaction);
+        }
+
+
+        public static async Task<dynamic[]> LoadSqlResultAsync(
+            String sql,
+            (String name, object value)[] parameters,
+            C connection,
+            T transaction)
+        {
+
+            Task<dynamic[]> task = Task.Run<dynamic[]>(() =>
+            {
+                var list = new List<dynamic>();
+
+                Database<C, T, CMD, R, P>.Query(
+                    sql,
+                    parameters,
+                    connection,
+                    transaction,
+                    (result) =>
+                    {
+
+                        while (result.Next())
+                        {
+                            list.Add(result.ResultValues);
+                        }
+
+                    });
+
+                return list.ToArray();
+            });
+
+            return await task;
 
         }
 

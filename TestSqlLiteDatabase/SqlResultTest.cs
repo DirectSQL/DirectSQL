@@ -231,6 +231,34 @@ namespace TestSqlLiteDatabase
         }
 
 
+        [TestMethod]
+        public void TestLoadAsync()
+        {
+            var db = new SqlLiteDatabase("Data Source=:memory:");
+            db.Process((conn, tran) =>
+            {
+                CreateTableForTest(conn);
+
+                InsertDataForTest(conn, tran);
+                InsertDataForTest(conn, tran);
+
+                dynamic[] result =
+                    SqlLiteDatabase
+                    .SqlResult
+                    .LoadSqlResultAsync(
+                        "select TEST_COL1,TEST_COL2 from TEST_TABLE",
+                        conn,
+                        tran)
+                    .Result;
+
+                Assert.AreEqual(result[0].TEST_COL1, "testValue");
+                Assert.AreEqual(result[0].TEST_COL2, 123);
+                Assert.AreEqual(result.Length, 2);
+
+            });
+        }
+
+
         private static void CreateTableForTest(IDbConnection connection)
         {
             using (var command = connection.CreateCommand())
