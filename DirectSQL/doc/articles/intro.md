@@ -1,5 +1,4 @@
-# An example
-
+#Example1
 ```
 public static void example()
 {
@@ -23,4 +22,27 @@ public static void example()
     });
 }
 ```
+
+#Example2
+```
+public static void example2()
+{
+    SqlLiteDatabase db = new SqlLiteDatabase("connectionString_to_yourdb");
+    db.Process((connection, transaction) =>
+    {
+		dynamic[] resultArray =
+			SqlLiteDatabase
+			.SqlResult
+			.LoadSqlResult(
+				"select TEST_COL1,TEST_COL2 from TEST_TABLE",
+				conn,
+				tran);
+
+        Console.Out.WriteLine("TEST_VAL1:" + resultArray[0].TEST_VAL1);
+        Console.Out.WriteLine("TEST_VAL2:" + resultArray[0].TEST_VAL2);
+
+    });
+}
+```
+
 
