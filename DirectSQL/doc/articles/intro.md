@@ -35,8 +35,8 @@ public static void example2()
 			.SqlResult
 			.LoadSqlResult(
 				"select TEST_COL1,TEST_COL2 from TEST_TABLE",
-				conn,
-				tran);
+				connection,
+				transaction);
 
         Console.Out.WriteLine("TEST_VAL1:" + resultArray[0].TEST_VAL1);
         Console.Out.WriteLine("TEST_VAL2:" + resultArray[0].TEST_VAL2);
