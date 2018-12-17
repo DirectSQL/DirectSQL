@@ -387,6 +387,46 @@ namespace DirectSQL
             return new P() { ParameterName = name, Value = value };
         }
 
+        public static dynamic[] LoadSqlResult(
+            String sql, 
+            (String,object)[] parameters,
+            C connection, 
+            T transaction)
+        {
+            return SqlResult.LoadSqlResult(sql, parameters, connection, transaction);
+        }
+
+        public static dynamic[] LoadSqlResult(
+            String sql,
+            C connection,
+            T transaction)
+        {
+            return SqlResult.LoadSqlResult(sql, connection, transaction);
+        }
+
+        public static async Task<dynamic[]> LoadSqlResultAsync(
+            String sql,
+            (String, object)[] parameters,
+            C connection,
+            T transaction)
+        {
+            return await SqlResult.LoadSqlResultAsync(
+                sql, 
+                parameters, 
+                connection, 
+                transaction);
+        }
+
+        public static async Task<dynamic[]> LoadSqlResultAsync(
+            String sql,
+            C connection,
+            T transaction)
+        {
+            return await SqlResult.LoadSqlResultAsync(
+                sql, 
+                connection, 
+                transaction);
+        }
 
         public class SqlResult: DirectSQL.SqlResult<R,CMD,T,C,P>
         {

@@ -32,7 +32,6 @@ public static void example2()
     {
 		dynamic[] resultArray =
 			SqlLiteDatabase
-			.SqlResult
 			.LoadSqlResult(
 				"select TEST_COL1,TEST_COL2 from TEST_TABLE",
 				connection,
