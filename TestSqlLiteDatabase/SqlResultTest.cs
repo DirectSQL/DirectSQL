@@ -239,6 +239,19 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result2[0].TEST_COL2, 123);
                 Assert.AreEqual(result2.Length, 2);
 
+                var val = "testValue";
+                dynamic[] result3 =
+                    SqlLiteDatabase
+                    .LoadFormattableSqlResult(
+                        $"select * from TEST_TABLE where TEST_COL1 = {val}",
+                        conn,
+                        tran);
+
+                Assert.AreEqual(result3[0].TEST_COL1, "testValue");
+                Assert.AreEqual(result3[0].TEST_COL2, 123);
+                Assert.AreEqual(result3.Length, 2);
+
+
             });
         }
 
@@ -279,7 +292,17 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result2[0].TEST_COL2, 123);
                 Assert.AreEqual(result2.Length, 2);
 
+                var val = "testValue";
+                    dynamic[] result3 =
+                    SqlLiteDatabase
+                    .LoadFormattableSqlResultAsync(
+                        $"select * from TEST_TABLE where TEST_COL1 = {val}",
+                        conn,
+                        tran).Result;
 
+                Assert.AreEqual(result3[0].TEST_COL1, "testValue");
+                Assert.AreEqual(result3[0].TEST_COL2, 123);
+                Assert.AreEqual(result3.Length, 2);
 
             });
         }

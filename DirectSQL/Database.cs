@@ -404,6 +404,19 @@ namespace DirectSQL
             return SqlResult.LoadSqlResult(sql, connection, transaction);
         }
 
+        public static dynamic[] LoadFormattableSqlResult(
+            FormattableString sql, 
+            C connection, 
+            T transaction)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            return SqlResult.LoadSqlResult(
+                extracted.sql, 
+                extracted.parameters, 
+                connection, 
+                transaction);
+        }
+
         public static async Task<dynamic[]> LoadSqlResultAsync(
             String sql,
             (String, object)[] parameters,
@@ -425,6 +438,19 @@ namespace DirectSQL
             return await SqlResult.LoadSqlResultAsync(
                 sql, 
                 connection, 
+                transaction);
+        }
+
+        public static async Task<dynamic[]> LoadFormattableSqlResultAsync(
+            FormattableString sql,
+            C connection,
+            T transaction)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            return await SqlResult.LoadSqlResultAsync(
+                extracted.sql,
+                extracted.parameters,
+                connection,
                 transaction);
         }
 
