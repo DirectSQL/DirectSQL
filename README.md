@@ -17,6 +17,7 @@ Now, this library has supporting code for next DBMS
 * CockroachDB (Npgsql)
 * DB2
 * MySql
+* ODBC connected DBMS
 
 Documentation is [here](https://7k8m.github.io/DirectSQL.Document/doc/).
 
