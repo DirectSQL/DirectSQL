@@ -5,7 +5,7 @@ using System.Text;
 
 using System.Data.Odbc;
 
-namespace DirectSQL.OdbcServer
+namespace DirectSQL.Odbc
 {
     public class OdbcDatabase : Database<OdbcConnection, OdbcTransaction, OdbcCommand, OdbcDataReader, OdbcParameter>
     {
