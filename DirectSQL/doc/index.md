@@ -14,3 +14,4 @@ Now, this library has supporting code for next DBMS
 * CockroachDB (Npgsql)
 * DB2
 * MySql
+* ODBC connected DBMS
