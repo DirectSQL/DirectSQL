@@ -20,6 +20,6 @@ Now, this library has supporting code for next DBMS
 * MySql
 * ODBC connected DBMS
 
-Documentation is [here](https://7k8m.github.io/DirectSQL.Document/doc/).
+Documentation is [here](https://directsql.github.io/DirectSQL.Document/doc/).
 
 Please try :smile:.
