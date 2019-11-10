@@ -23,7 +23,7 @@ Documentation is [here](https://directsql.github.io/DirectSQL.Document/doc/).
 
 Please try :smile:.
 
-# Build
+# How to Build
 ````
  git clone git@github.com:DirectSQL/DirectSQL.git
  cd DirectSQL
