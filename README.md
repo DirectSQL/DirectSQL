@@ -1,5 +1,5 @@
 # Description
-[![Build Status](https://github.com/DirectSQL/DirectSQL/workflows/.NET%20Core/badge.svg?branch=master&event=push)](https://github.com/DirectSQL/DirectSQL/actions)<br/>
+[![Build Status](https://github.com/DirectSQL/DirectSQL/workflows/.NET%20Core/badge.svg?branch=master)](https://github.com/DirectSQL/DirectSQL/actions)<br/>
 [![Ready on NuGet](https://img.shields.io/nuget/v/DirectSQL.svg?style=flat)](http://NuGet.org/packages/DirectSQL/)
 
 Execute SQL directly !
