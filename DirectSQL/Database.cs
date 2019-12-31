@@ -13,7 +13,9 @@ namespace DirectSQL
     /// <param name="transaction">a transaction</param>
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="T">Type of Transaction</typeparam>
-    public delegate void SqlExecution<C,T>(C connection, T transaction) where C:IDbConnection where T : IDbTransaction;
+    public delegate void SqlExecution<C,T>(C connection, T transaction) 
+        where C:IDbConnection 
+        where T : IDbTransaction;
 
     /// <summary>
     /// Execute a sql asynchronously with a connection and a transaction.
@@ -23,14 +25,17 @@ namespace DirectSQL
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="T">Type of Transaction</typeparam>
     /// <returns>Task of asynchronous process</returns>
-    public delegate Task AsyncSqlExecution<C,T>(C connection, T transaction) where C : IDbConnection where T : IDbTransaction;
+    public delegate Task AsyncSqlExecution<C,T>(C connection, T transaction) 
+        where C : IDbConnection 
+        where T : IDbTransaction;
 
     /// <summary>
     /// Do something with a connection
     /// </summary>
     /// <param name="connection">a connection</param>
     /// <typeparam name="C">Type of Connection</typeparam>
-    public delegate void ConnectExecution<C>(C connection) where C : IDbConnection;
+    public delegate void ConnectExecution<C>(C connection) 
+        where C : IDbConnection;
 
     /// <summary>
     /// Do something asynchronously with a connection.
@@ -38,7 +43,8 @@ namespace DirectSQL
     /// <param name="connection">a connection</param>
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <returns>Task of asynchronous process</returns>
-    public delegate Task AsyncConnectExecution<C>(C connection) where C : IDbConnection;
+    public delegate Task AsyncConnectExecution<C>(C connection) 
+        where C : IDbConnection;
 
     /// <summary>
     /// Read sql result.
@@ -49,7 +55,13 @@ namespace DirectSQL
     /// <typeparam name="T">Type of Transaction</typeparam>
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="P">Type of DataParameter</typeparam>
-    public delegate void ReadSqlResult<R,CMD,T,C,P>(SqlResult<R,CMD,T,C,P> result)  where CMD : IDbCommand where R : IDataReader where T : IDbTransaction where C : IDbConnection where P:IDataParameter,new();
+    public delegate void ReadSqlResult<R,CMD,T,C,P>(SqlResult<R,CMD,T,C,P> result)  
+        where CMD : IDbCommand 
+        where R : IDataReader 
+        where T : IDbTransaction 
+        where C : IDbConnection 
+        where P:IDataParameter,
+        new();
 
     /// <summary>
     /// Database class is entry point of DirectSQL library.
@@ -59,7 +71,13 @@ namespace DirectSQL
     /// <typeparam name="CMD">Type of DbCommand</typeparam>
     /// <typeparam name="R">Type of DataReader</typeparam>
     /// <typeparam name="P">Type of DataParameter</typeparam>
-    public abstract class Database<C,T,CMD,R,P> where C : IDbConnection where T : IDbTransaction where CMD : IDbCommand where R : IDataReader where P:IDataParameter,new()
+    public abstract class Database<C,T,CMD,R,P> 
+        where C : IDbConnection 
+        where T : IDbTransaction 
+        where CMD : IDbCommand 
+        where R : IDataReader 
+        where P:IDataParameter,
+        new()
     {
 
         /// <summary>
