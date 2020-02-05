@@ -14,7 +14,7 @@ namespace DirectSQL
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="T">Type of Transaction</typeparam>
     public delegate void SqlExecution<C,T>(C connection, T transaction) 
-        where C:IDbConnection 
+        where C : IDbConnection 
         where T : IDbTransaction;
 
     /// <summary>
