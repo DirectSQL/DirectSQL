@@ -18,7 +18,13 @@ namespace DirectSQL
     /// <typeparam name="T">Type of Transaction</typeparam>
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="P">Type of DataParameter</typeparam>
-    public class SqlResult<R,CMD,T,C,P>:IDisposable where R:IDataReader where CMD:IDbCommand where T : IDbTransaction where C : IDbConnection where P : IDataParameter, new()
+    public class SqlResult<R,CMD,T,C,P>:IDisposable 
+        where R:IDataReader 
+        where CMD:IDbCommand 
+        where T : IDbTransaction 
+        where C : IDbConnection 
+        where P : IDataParameter, 
+        new()
     {
         private R _reader;
         private CMD _command;
@@ -209,7 +215,9 @@ namespace DirectSQL
         }
 
 
-        private static ExpandoObject CreateResultValue(R reader, ImmutableArray<String> fields)
+        private static ExpandoObject CreateResultValue(
+            R reader, 
+            ImmutableArray<String> fields)
         {
             var values = new ExpandoObject();
 
@@ -231,7 +239,9 @@ namespace DirectSQL
         }
 
 
-        private static (string, object)[] CreateResultTuples(R reader, ImmutableArray<string> resultFields)
+        private static (string, object)[] CreateResultTuples(
+            R reader, 
+            ImmutableArray<string> resultFields)
         {
             var array = new (String, object)[resultFields.Length];
             for(int i = 0; i < resultFields.Length; i ++)
@@ -293,7 +303,11 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-            return await LoadSqlResultAsync(sql, new (String, object)[0], connection, transaction);
+            return await LoadSqlResultAsync(
+                sql, 
+                new (String, object)[0], 
+                connection, 
+                transaction);
         }
 
 
@@ -351,7 +365,10 @@ namespace DirectSQL
             private SqlResult<R,CMD,T,C,P> _sqlResult;
             private Func<dynamic, TP> _convert;
 
-            internal Enumerable(SqlResult<R,CMD,T,C, P> sqlResult,Func<dynamic, TP> converter){
+            internal Enumerable(
+                SqlResult<R,CMD,T,C, P> sqlResult,
+                Func<dynamic, TP> converter)
+            {                
                 _sqlResult = sqlResult;
                 _convert = converter;
             }
@@ -376,7 +393,10 @@ namespace DirectSQL
             private SqlResult<R,CMD,T,C,P> _sqlResult;
             private Func<dynamic, TP> _convert;
 
-            internal Enumerator(SqlResult<R,CMD,T,C,P> sqlResult, Func<dynamic, TP> converter){
+            internal Enumerator(
+                SqlResult<R,CMD,T,C,P> sqlResult, 
+                Func<dynamic, TP> converter)
+            {
                 _sqlResult = sqlResult;
                 _convert = converter;
             }
