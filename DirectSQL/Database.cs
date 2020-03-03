@@ -178,7 +178,12 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-            return ExecuteNonQuery(sql, new ValueTuple<String, object>[0], connection, transaction);
+            return ExecuteNonQuery(
+                sql, 
+                new ValueTuple<String, object>[0], 
+                connection, 
+                transaction
+            );
         }
 
 
@@ -218,7 +223,12 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-            return ExecuteScalar(sql, new ValueTuple<String, object>[0], connection, transaction);
+            return ExecuteScalar(
+                sql, 
+                new ValueTuple<String, object>[0], 
+                connection, 
+                transaction
+            );
         }
 
         /// <summary>
@@ -259,7 +269,12 @@ namespace DirectSQL
             T transaction)
         {
             var extracted = ExtractSqlAndParam(sql);
-            return ExecuteScalar(extracted.sql, extracted.parameters, connection, transaction);
+            return ExecuteScalar(
+                extracted.sql, 
+                extracted.parameters, 
+                connection, 
+                transaction
+            );
         }
 
 
@@ -278,7 +293,12 @@ namespace DirectSQL
             T transaction,
             ReadSqlResult<R,CMD,T,C,P> readResult)
         {
-            using (var result = new SqlResult<R,CMD,T,C,P>(sql,parameters,connection,transaction))
+            using (var result = 
+                    new SqlResult<R,CMD,T,C,P>(
+                        sql,
+                        parameters,
+                        connection,
+                        transaction ))
             {
                 result.Init();
                 readResult(result);
@@ -299,7 +319,13 @@ namespace DirectSQL
             T transaction,
             ReadSqlResult<R,CMD,T,C,P> readResult)
         {
-            Query(sql, new (String,object)[0],connection,transaction, readResult);
+            Query(
+                sql, 
+                new (String,object)[0],
+                connection,
+                transaction, 
+                readResult
+            );
         }
 
 
@@ -317,7 +343,13 @@ namespace DirectSQL
             ReadSqlResult<R,CMD,T,C,P>  readResult)
         {
             var extracted = ExtractSqlAndParam(sql);
-            Query(extracted.sql, extracted.parameters, connection, transaction, readResult);
+            Query(
+                extracted.sql, 
+                extracted.parameters, 
+                connection, 
+                transaction, 
+                readResult
+            );
         }
 
 
@@ -326,7 +358,9 @@ namespace DirectSQL
         /// </summary>
         /// <param name="command">command of sql</param>
         /// <param name="parameters">parameter values bound to sql</param>
-        internal static void SetParameters(CMD command, (String name,object value)[] parameters)
+        internal static void SetParameters(
+            CMD command, 
+            (String name,object value)[] parameters)
         {
             for (int i = 0; i < parameters.Length; i ++)
             {
@@ -344,7 +378,9 @@ namespace DirectSQL
         /// </summary>
         /// <param name="connection">connection to be used</param>
         /// <param name="execute">to be executed</param>
-        public static void Transaction(C connection, SqlExecution<C,T> execute)
+        public static void Transaction(
+            C connection, 
+            SqlExecution<C,T> execute)
         {
             using(var transaction = (T) connection.BeginTransaction())
             {
@@ -355,7 +391,10 @@ namespace DirectSQL
                 catch( Exception exception )
                 {
                     transaction.Rollback();
-                    throw new DatabaseException( MessageResource.msg_error_sqlExecutionError, exception );
+                    throw new DatabaseException( 
+                        MessageResource.msg_error_sqlExecutionError, 
+                        exception 
+                    );
                 }
             }
         }
@@ -367,7 +406,9 @@ namespace DirectSQL
         /// <param name="connection">connection to be used</param>
         /// <param name="execute">to be executed</param>
         /// <returns>A task stands for asynchronous execution</returns>
-        public static async Task TransactionAsync(C connection, AsyncSqlExecution<C,T> execute)
+        public static async Task TransactionAsync(
+            C connection, 
+            AsyncSqlExecution<C,T> execute)
         {
             using (var transaction = (T) connection.BeginTransaction())
             {
@@ -378,7 +419,9 @@ namespace DirectSQL
                 catch (Exception exception)
                 {
                     transaction.Rollback();
-                    throw new DatabaseException(MessageResource.msg_error_sqlExecutionError, exception);
+                    throw new DatabaseException(
+                        MessageResource.msg_error_sqlExecutionError, 
+                        exception);
                 }
             }
         }
