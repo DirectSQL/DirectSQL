@@ -40,7 +40,6 @@ namespace TestSqlLiteDatabase
                     result.Next();
                     var fieldNames = result.ResultFields;
                 });
-
             });
         }
 
@@ -65,7 +64,6 @@ namespace TestSqlLiteDatabase
                         Assert.AreEqual(fieldNames[0], "TEST_COL1");
                         Assert.AreEqual(fieldNames[1], "TEST_COL2");
                     });
-
             });
         }
 
@@ -102,14 +100,10 @@ namespace TestSqlLiteDatabase
                         {
                             var failedToRead = result.ResultValues; //now empty row
                         });
-
                     }
                 );
-
             });
-
         }
-
 
         [TestMethod]
         public void TestResultObject()
@@ -140,10 +134,8 @@ namespace TestSqlLiteDatabase
                         Assert.AreEqual(resultObject.Val2, 123);
 
                     });
-
             });
         }
-
 
         [TestMethod]
         public void TestEnumerable()
@@ -227,7 +219,6 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result[0].TEST_COL2, 123);
                 Assert.AreEqual(result.Length, 2);
 
-
                 dynamic[] result2 =
                     SqlLiteDatabase
                     .LoadSqlResult(
@@ -251,10 +242,8 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result3[0].TEST_COL2, 123);
                 Assert.AreEqual(result3.Length, 2);
 
-
             });
         }
-
 
         [TestMethod]
         public void TestLoadAsync()
@@ -303,10 +292,8 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result3[0].TEST_COL1, "testValue");
                 Assert.AreEqual(result3[0].TEST_COL2, 123);
                 Assert.AreEqual(result3.Length, 2);
-
             });
         }
-
 
         private static void CreateTableForTest(IDbConnection connection)
         {
@@ -320,7 +307,6 @@ namespace TestSqlLiteDatabase
                     ")";
 
                 command.ExecuteNonQuery();
-
             }
         }
 
@@ -342,7 +328,5 @@ namespace TestSqlLiteDatabase
             public String Val1 { get; set; }
             public long Val2 { get; set; }
         }
-
-
     }
 }

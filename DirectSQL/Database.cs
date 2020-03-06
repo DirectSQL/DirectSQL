@@ -79,7 +79,6 @@ namespace DirectSQL
         where P:IDataParameter,
         new()
     {
-
         /// <summary>
         /// Asynchronous process with a connection
         /// </summary>
@@ -101,7 +100,6 @@ namespace DirectSQL
         /// <returns></returns>
         public async Task ProcessAsync(AsyncSqlExecution<C,T> execute)
         {
-
            await ProcessAsync(async (connection) =>
            {
                await TransactionAsync(connection, execute);
@@ -399,7 +397,6 @@ namespace DirectSQL
             }
         }
 
-
         /// <summary>
         /// Execute in a transaction asynchronously.
         /// </summary>
@@ -440,7 +437,6 @@ namespace DirectSQL
                     )
                     .ToArray() // { ("@1",value1) }
             );                
-
         }
 
         public static P CreateParameter(string name, object value)
@@ -525,7 +521,5 @@ namespace DirectSQL
             {
             }
         }
-
-
     }
 }

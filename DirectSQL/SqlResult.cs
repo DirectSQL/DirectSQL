@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace DirectSQL
 {
-
     /// <summary>
     /// Object to get result of SQL
     /// </summary>
@@ -111,7 +110,6 @@ namespace DirectSQL
             return convert(ResultValues);
         }
 
-
         /// <summary>
         /// Return enumerable of SqlResult
         /// </summary>
@@ -122,7 +120,6 @@ namespace DirectSQL
         {
             return new Enumerable<TP>(this, convert);
         }
-
 
         /// <summary>
         /// Result values as an array of tuples
@@ -141,8 +138,7 @@ namespace DirectSQL
                 return _resultTuples;
             }
         }
-
-
+s
         internal SqlResult ( 
             String sql, 
             (String name,object value)[] parameters, 
@@ -157,9 +153,7 @@ namespace DirectSQL
             _command.Transaction = transaction;
 
             _allowInitialize = true;
-
         }
-
 
         /// <summary>
         /// Move cursor to next
@@ -175,7 +169,6 @@ namespace DirectSQL
             return _reader.Read();
 
         }
-
 
         internal void Init()
         {
@@ -205,7 +198,6 @@ namespace DirectSQL
 
         }
 
-
         private void InitResultValues()
         {
             if (_resultValues != null)
@@ -213,7 +205,6 @@ namespace DirectSQL
             _resultValues = CreateResultValue(_reader, ResultFields);
 
         }
-
 
         private static ExpandoObject CreateResultValue(
             R reader, 
@@ -230,14 +221,12 @@ namespace DirectSQL
 
         }
 
-
         private void InitResultTuples()
         {
             if (_resultTuples != null)
                 return;
             _resultTuples = CreateResultTuples(_reader, ResultFields);
         }
-
 
         private static (string, object)[] CreateResultTuples(
             R reader, 
@@ -251,7 +240,6 @@ namespace DirectSQL
             return array;
         }
 
-
         internal void Close()
         {
             if (_reader != null)
@@ -260,7 +248,6 @@ namespace DirectSQL
             if ( _command != null )
                 _command.Dispose();
         }
-
 
         /// <summary>
         /// Dispose resources.
@@ -277,7 +264,6 @@ namespace DirectSQL
             C connection, 
             T transaction)
         {
-
             var list = new List<dynamic>();
 
             Database<C, T, CMD, R, P>.Query(
@@ -286,16 +272,13 @@ namespace DirectSQL
                 connection,
                 transaction,
                 (result) => {
-
                     while (result.Next())
                     {
                         list.Add(result.ResultValues);
                     }
-
                 });
 
             return list.ToArray();
-
         }
 
         public static async Task<dynamic[]> LoadSqlResultAsync(
@@ -317,7 +300,6 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-
             Task<dynamic[]> task = Task.Run<dynamic[]>(() =>
             {
                 var list = new List<dynamic>();
@@ -329,21 +311,17 @@ namespace DirectSQL
                     transaction,
                     (result) =>
                     {
-
                         while (result.Next())
                         {
                             list.Add(result.ResultValues);
                         }
-
                     });
 
                 return list.ToArray();
             });
 
             return await task;
-
         }
-
 
         public static dynamic[] LoadSqlResult(
             String sql,
@@ -358,10 +336,8 @@ namespace DirectSQL
             );
         }
 
-
         private class Enumerable<TP> : IEnumerable<TP> 
         {
-
             private SqlResult<R,CMD,T,C,P> _sqlResult;
             private Func<dynamic, TP> _convert;
 
@@ -383,13 +359,10 @@ namespace DirectSQL
             {
                 return GetEnumerator();
             }
-
         }
-
 
         private class Enumerator<TP> : IEnumerator<TP>, IEnumerator 
         {
-
             private SqlResult<R,CMD,T,C,P> _sqlResult;
             private Func<dynamic, TP> _convert;
 
@@ -420,6 +393,5 @@ namespace DirectSQL
                 _sqlResult.Init();
             }
         }
-
     }
 }

@@ -17,7 +17,6 @@ namespace TestSqlLiteDatabase
         [TestMethod]
         public void TestTransaction()
         {
-
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
 
             db.Process((connection) => {
@@ -46,19 +45,15 @@ namespace TestSqlLiteDatabase
                         AssertDataCount(1, conn, tran);
                     }
                 );
-
             });
         }
-
 
         [TestMethod]
         public void TestTransactionAsync()
         {
-
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
 
             db.Process(async (connection) => {
-
                 CreateTableForTest(connection);
 
                 await SqlLiteDatabase.TransactionAsync(connection,
@@ -87,10 +82,8 @@ namespace TestSqlLiteDatabase
                         AssertDataCount(1, conn, tran);
                     }
                 );
-
             });
         }
-
 
         private static void AssertDataCount(long expectedCount,SQLiteConnection conn, SQLiteTransaction tran)
         {
@@ -125,7 +118,5 @@ namespace TestSqlLiteDatabase
                 conn,
                 tran);
         }
-
-
     }
 }
