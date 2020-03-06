@@ -138,7 +138,7 @@ namespace DirectSQL
                 return _resultTuples;
             }
         }
-s
+        
         internal SqlResult ( 
             String sql, 
             (String name,object value)[] parameters, 
