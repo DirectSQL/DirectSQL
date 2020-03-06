@@ -167,7 +167,6 @@ namespace DirectSQL
             _allowInitialize = true;
 
             return _reader.Read();
-
         }
 
         internal void Init()
@@ -182,7 +181,6 @@ namespace DirectSQL
             }
         }
 
-
         private void InitResultFields()
         {
             if (_resultFields != null)
@@ -195,7 +193,6 @@ namespace DirectSQL
             }
 
             _resultFields = ImmutableArray.ToImmutableArray<String>(list);
-
         }
 
         private void InitResultValues()
@@ -203,7 +200,6 @@ namespace DirectSQL
             if (_resultValues != null)
                 return;
             _resultValues = CreateResultValue(_reader, ResultFields);
-
         }
 
         private static ExpandoObject CreateResultValue(
@@ -218,7 +214,6 @@ namespace DirectSQL
             }
 
             return values;
-
         }
 
         private void InitResultTuples()
