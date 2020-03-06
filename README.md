@@ -66,7 +66,6 @@ public static void example2()
         
         Console.Out.WriteLine("TEST_VAL1:" + resultArray[0].TEST_VAL1);
         Console.Out.WriteLine("TEST_VAL2:" + resultArray[0].TEST_VAL2);
-
     });
 }
 ```
