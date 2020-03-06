@@ -104,7 +104,6 @@ namespace DirectSQL
            {
                await TransactionAsync(connection, execute);
            });
-
         }
 
         /// <summary>
@@ -163,7 +162,6 @@ namespace DirectSQL
             }
         }
 
-
         /// <summary>
         /// Execute a sql like update / insert
         /// </summary>
@@ -183,7 +181,6 @@ namespace DirectSQL
                 transaction
             );
         }
-
 
         /// <summary>
         /// Execute a sql like update / insert
@@ -207,7 +204,6 @@ namespace DirectSQL
                 connection,
                 transaction);
         }
-
 
         /// <summary>
         /// Execute a sql and get a scalar.
@@ -253,7 +249,6 @@ namespace DirectSQL
             }
         }
 
-
         /// <summary>
         /// Execute a sql and get a scalar.
         /// </summary>
@@ -274,7 +269,6 @@ namespace DirectSQL
                 transaction
             );
         }
-
 
         /// <summary>
         /// Execute a sql to query
@@ -303,7 +297,6 @@ namespace DirectSQL
             }
         }
 
-
         /// <summary>
         /// Execute a sql to query
         /// </summary>
@@ -325,7 +318,6 @@ namespace DirectSQL
                 readResult
             );
         }
-
 
         /// <summary>
         /// Execute a sql to query
@@ -350,7 +342,6 @@ namespace DirectSQL
             );
         }
 
-
         /// <summary>
         /// Bind parameters to a command of sql
         /// </summary>
@@ -369,7 +360,6 @@ namespace DirectSQL
                 command.Parameters.Add(parameter);
             }
         }
-
 
         /// <summary>
         /// Execute in a transaction.

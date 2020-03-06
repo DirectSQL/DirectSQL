@@ -132,7 +132,6 @@ namespace TestSqlLiteDatabase
 
                         Assert.AreEqual(resultObject.Val1, "testValue");
                         Assert.AreEqual(resultObject.Val2, 123);
-
                     });
             });
         }
@@ -180,7 +179,6 @@ namespace TestSqlLiteDatabase
 
                         Assert.AreEqual(123, sum);
 
-
                         InsertDataForTest(conn, tran);
 
                         var sum2 =
@@ -189,10 +187,7 @@ namespace TestSqlLiteDatabase
                             ).Sum();
 
                         Assert.AreEqual(123 * 2, sum2);
-
-
                     });
-
             });
         }
 
@@ -241,7 +236,6 @@ namespace TestSqlLiteDatabase
                 Assert.AreEqual(result3[0].TEST_COL1, "testValue");
                 Assert.AreEqual(result3[0].TEST_COL2, 123);
                 Assert.AreEqual(result3.Length, 2);
-
             });
         }
 
