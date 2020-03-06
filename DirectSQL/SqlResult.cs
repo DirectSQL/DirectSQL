@@ -138,7 +138,7 @@ namespace DirectSQL
                 return _resultTuples;
             }
         }
-        
+
         internal SqlResult ( 
             String sql, 
             (String name,object value)[] parameters, 
@@ -257,7 +257,6 @@ namespace DirectSQL
             Close();
         }
 
-
         public static dynamic[] LoadSqlResult(
             String sql,
             (String name, object value)[] parameters,
@@ -292,7 +291,6 @@ namespace DirectSQL
                 connection, 
                 transaction);
         }
-
 
         public static async Task<dynamic[]> LoadSqlResultAsync(
             String sql,
