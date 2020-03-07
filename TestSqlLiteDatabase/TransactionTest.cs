@@ -48,43 +48,6 @@ namespace TestSqlLiteDatabase
             });
         }
 
-        [TestMethod]
-        public void TestTransactionAsync()
-        {
-            SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
-
-            db.Process(async (connection) => {
-                CreateTableForTest(connection);
-
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) => {
-                        await Task.Delay(1);
-                        InsertDataForTest(conn, tran);
-                        tran.Rollback();
-                    }
-                );
-
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
-                    {
-                        await Task.Delay(1);
-                        AssertDataCount(0, conn, tran);
-                        InsertDataForTest(conn, tran);
-                        AssertDataCount(1, conn, tran);
-                        tran.Commit();
-                    }
-                );
-
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
-                    {
-                        await Task.Delay(1);
-                        AssertDataCount(1, conn, tran);
-                    }
-                );
-            });
-        }
-
         private static void AssertDataCount(long expectedCount,SQLiteConnection conn, SQLiteTransaction tran)
         {
             Assert.AreEqual(

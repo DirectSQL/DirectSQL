@@ -387,32 +387,6 @@ namespace DirectSQL
             }
         }
 
-        /// <summary>
-        /// Execute in a transaction asynchronously.
-        /// </summary>
-        /// <param name="connection">connection to be used</param>
-        /// <param name="execute">to be executed</param>
-        /// <returns>A task stands for asynchronous execution</returns>
-        public static async Task TransactionAsync(
-            C connection, 
-            AsyncSqlExecution<C,T> execute)
-        {
-            using (var transaction = (T) connection.BeginTransaction())
-            {
-                try
-                {
-                    await execute(connection, transaction);
-                }
-                catch (Exception exception)
-                {
-                    transaction.Rollback();
-                    throw new DatabaseException(
-                        MessageResource.msg_error_sqlExecutionError, 
-                        exception);
-                }
-            }
-        }
-
         private static(String sql, (String,Object)[] parameters) ExtractSqlAndParam(FormattableString sqlFormattableString)
         {
             var paramNames =
