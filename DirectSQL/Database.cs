@@ -94,19 +94,6 @@ namespace DirectSQL
         }
 
         /// <summary>
-        /// Asynchronous process with a connection and a transaction
-        /// </summary>
-        /// <param name="execute">execution with a connection and a transaction</param>
-        /// <returns></returns>
-        public async Task ProcessAsync(AsyncSqlExecution<C,T> execute)
-        {
-           await ProcessAsync(async (connection) =>
-           {
-               await TransactionAsync(connection, execute);
-           });
-        }
-
-        /// <summary>
         /// Synchronous process with a connection
         /// </summary>
         /// <param name="execute">execution with a connection</param>
