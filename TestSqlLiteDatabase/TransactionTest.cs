@@ -49,11 +49,11 @@ namespace TestSqlLiteDatabase
         }
 
         [TestMethod]
-        public void TestTransactionAsync()
+        public async Task TestTransactionAsync()
         {
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
 
-            db.Process(async (connection) => {
+            await db.ProcessAsync(async (connection) => {
                 CreateTableForTest(connection);
 
                 await SqlLiteDatabase.TransactionAsync(connection,
