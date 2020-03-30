@@ -39,8 +39,6 @@ namespace TestSqlLiteDatabase
                 await Task.Delay(1); //Dummy code to resolve warning in build.
             });
             task2.Wait();
-
         }
-
     }
 }

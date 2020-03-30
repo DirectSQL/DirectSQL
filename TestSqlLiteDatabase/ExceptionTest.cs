@@ -25,7 +25,6 @@ namespace TestSqlLiteDatabase
                 });
 
                 Assert.Fail();
-
             }
             catch (DatabaseException ex)
             {
@@ -57,8 +56,6 @@ namespace TestSqlLiteDatabase
                     ERROR_MSG
                 );
             }
-
         }
-
     }
 }

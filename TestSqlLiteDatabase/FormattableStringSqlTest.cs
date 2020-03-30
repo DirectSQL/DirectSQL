@@ -29,12 +29,10 @@ namespace TestSqlLiteDatabase
         {
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
             db.Process((conn, tran) => {
-
                 var testValue = "TESTVALUE";
                 var result = SqlLiteDatabase.ExecuteFormattableScalar($"values({testValue})", conn, tran);
 
                 Assert.AreEqual(testValue, result);
-
             });
         }
 
@@ -43,7 +41,6 @@ namespace TestSqlLiteDatabase
         {
             SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
             db.Process((conn, tran) => {
-
                 var testValue = "TESTVALUE";
                 var testValue2 = "TESTVALUE2";
 
@@ -52,18 +49,14 @@ namespace TestSqlLiteDatabase
                     conn, 
                     tran,
                     (result) => {
-
                         Assert.AreEqual(result.Sql, "values(@0,@1)");
 
                         result.Next();
                         Assert.AreEqual(testValue, result.ResultTuples[0].value);
                         Assert.AreEqual(testValue2, result.ResultTuples[1].value);
-
                     }
                 );
-
             });
         }
-
     }
 }

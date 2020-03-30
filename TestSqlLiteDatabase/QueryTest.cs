@@ -56,7 +56,6 @@ namespace TestSqlLiteDatabase
                             var resultValues2 = result.ResultValues;
                             Assert.AreEqual(resultValues2.TEST_VAL1, "xyz");
                             Assert.AreEqual(resultValues2.TEST_VAL2, 456L);
-
                         }
                         else
                         {
@@ -108,7 +107,6 @@ namespace TestSqlLiteDatabase
                     transaction
                 );
                 Assert.AreEqual(abcdef2, "abcdef");
-
             });
         }
 
@@ -124,7 +122,6 @@ namespace TestSqlLiteDatabase
                     ")";
 
                 command.ExecuteNonQuery();
-
             }
         }
     }

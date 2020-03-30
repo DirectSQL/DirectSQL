@@ -9,7 +9,6 @@ namespace DirectSQL.Npgsql
 {
     public class NpgsqlDatabase : Database<NpgsqlConnection, NpgsqlTransaction, NpgsqlCommand, NpgsqlDataReader, NpgsqlParameter>
     {
-
         readonly private String _npgsqlConnectionString;
 
         public NpgsqlDatabase(String npgsqlConnectionString)
@@ -21,6 +20,5 @@ namespace DirectSQL.Npgsql
         {
             return new NpgsqlConnection( _npgsqlConnectionString );
         }
-
     }
 }

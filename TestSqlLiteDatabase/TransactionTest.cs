@@ -103,7 +103,6 @@ namespace TestSqlLiteDatabase
                     ")";
 
                 command.ExecuteNonQuery();
-
             }
         }
 

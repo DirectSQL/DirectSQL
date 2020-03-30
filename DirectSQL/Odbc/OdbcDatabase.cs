@@ -9,7 +9,6 @@ namespace DirectSQL.Odbc
 {
     public class OdbcDatabase : Database<OdbcConnection, OdbcTransaction, OdbcCommand, OdbcDataReader, OdbcParameter>
     {
-
         readonly private String _odbcConnectionString;
 
         public OdbcDatabase(String odbcConnectionString)
@@ -21,6 +20,5 @@ namespace DirectSQL.Odbc
         {
             return new OdbcConnection ( _odbcConnectionString );
         }
-
     }
 }

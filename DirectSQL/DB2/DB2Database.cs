@@ -9,7 +9,6 @@ namespace DirectSQL.DB2
 {
     public class DB2Database : Database<DB2Connection, DB2Transaction, DB2Command, DB2DataReader, DB2Parameter>
     {
-
         readonly private String _db2ConnectionString;
 
         public DB2Database(String db2ConnectionString)
@@ -21,6 +20,5 @@ namespace DirectSQL.DB2
         {
             return new DB2Connection ( _db2ConnectionString );
         }
-
     }
 }
