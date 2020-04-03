@@ -20,7 +20,6 @@ namespace TestSqlLiteDatabase
                 SqlLiteDatabase.ExecuteFormattableNonQuery($"insert into TEST_TABLE(COL1) values({testValue})", conn, tran);
 
                 Assert.AreEqual(testValue, SqlLiteDatabase.ExecuteScalar("select COL1 from TEST_TABLE", conn, tran));
-
             });
         }
 
