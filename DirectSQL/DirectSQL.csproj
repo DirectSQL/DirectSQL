@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>3.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>3.0.1</Version>
     <Authors />
-    <PackageLicenseUrl>https://github.com/DirectSQL/DirectSQL/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/DirectSQL/DirectSQL/</PackageProjectUrl>
     <Description>Execute SQL directly !
 This .NET library is very thin database framework on top of System.Data.</Description>
@@ -33,5 +34,9 @@ This .NET library is very thin database framework on top of System.Data.</Descri
       <LastGenOutput>MessageResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+ <ItemGroup>
+    <None Include="LICENSE" Pack="true" PackagePath=""/>
+</ItemGroup> 
 
 </Project>
