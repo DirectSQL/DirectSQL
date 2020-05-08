@@ -18,8 +18,8 @@ namespace DirectSQL
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="P">Type of DataParameter</typeparam>
     public class SqlResult<R,CMD,T,C,P>:IDisposable 
-        where R:IDataReader 
-        where CMD:IDbCommand 
+        where R : IDataReader 
+        where CMD : IDbCommand 
         where T : IDbTransaction 
         where C : IDbConnection 
         where P : IDataParameter, 
