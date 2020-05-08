@@ -60,7 +60,7 @@ namespace DirectSQL
         where R : IDataReader 
         where T : IDbTransaction 
         where C : IDbConnection 
-        where P:IDataParameter,
+        where P : IDataParameter,
         new();
 
     /// <summary>
@@ -76,7 +76,7 @@ namespace DirectSQL
         where T : IDbTransaction 
         where CMD : IDbCommand 
         where R : IDataReader 
-        where P:IDataParameter,
+        where P : IDataParameter,
         new()
     {
         /// <summary>
