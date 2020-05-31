@@ -66,7 +66,7 @@ namespace TestSqlLiteDatabase
 
                 SqlLiteDatabase.Query(
                     "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
-                    new (String, object)[] {ValueTuple.Create("@val1","abcdef")},
+                    new (String, object)[] {("@val1","abcdef")},
                     connection,
                     transaction,
                     (result) => {
@@ -85,7 +85,7 @@ namespace TestSqlLiteDatabase
 
                 SqlLiteDatabase.Query(
                     "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
-                    new (String, object)[] { ValueTuple.Create("@val1", "XXXXXXX") },
+                    new (String, object)[] {("@val1", "XXXXXXX") },
                     connection,
                     transaction,
                     (result) => {
@@ -102,7 +102,7 @@ namespace TestSqlLiteDatabase
 
                 var abcdef2 = SqlLiteDatabase.ExecuteScalar(
                     "select TEST_VAL1 from TEST_TABLE where TEST_VAL1 = @val1",
-                    new (String, object)[] { ValueTuple.Create("@val1", "abcdef") },
+                    new (String, object)[] { ("@val1", "abcdef") },
                     connection,
                     transaction
                 );
