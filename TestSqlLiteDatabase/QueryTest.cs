@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.Data;
-
+using System.Data.SQLite;
 using DirectSQL.SqlLite;
 
 namespace TestSqlLiteDatabase
@@ -107,6 +107,17 @@ namespace TestSqlLiteDatabase
                     transaction
                 );
                 Assert.AreEqual(abcdef2, "abcdef");
+
+                var abcdef3 = SqlLiteDatabase.ExecuteScalar(
+                    "select TEST_VAL1 from TEST_TABLE where TEST_VAL1 = @val1",
+                    new SQLiteParameter[] {
+                        SqlLiteDatabase.CreateParameter("@val1","abcdef",DbType.String)
+                    },
+                    connection,
+                    transaction
+                );
+                Assert.AreEqual(abcdef3, "abcdef");
+
             });
         }
 
