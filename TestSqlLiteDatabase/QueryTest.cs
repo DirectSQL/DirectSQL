@@ -117,7 +117,6 @@ namespace TestSqlLiteDatabase
                     transaction
                 );
                 Assert.AreEqual(abcdef3, "abcdef");
-
             });
         }
 
