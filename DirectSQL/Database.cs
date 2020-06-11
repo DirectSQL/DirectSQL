@@ -347,7 +347,6 @@ namespace DirectSQL
             }
         }
 
-
         /// <summary>
         /// Execute a sql to query
         /// </summary>
