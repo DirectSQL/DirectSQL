@@ -292,6 +292,19 @@ namespace DirectSQL
             );
         }
 
+        public static dynamic[] LoadSqlResult(
+            String sql,
+            C connection,
+            T transaction)
+        {
+            return LoadSqlResult(
+                sql, 
+                new (String, object)[0], 
+                connection, 
+                transaction
+            );
+        }
+        
         public static async Task<dynamic[]> LoadSqlResultAsync(
             String sql,
             C connection,
@@ -346,19 +359,6 @@ namespace DirectSQL
 
             return await task;
         }       
-
-        public static dynamic[] LoadSqlResult(
-            String sql,
-            C connection,
-            T transaction)
-        {
-            return LoadSqlResult(
-                sql, 
-                new (String, object)[0], 
-                connection, 
-                transaction
-            );
-        }
 
         private class Enumerable<TP> : IEnumerable<TP> 
         {
