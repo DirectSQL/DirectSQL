@@ -141,14 +141,17 @@ namespace DirectSQL
 
         internal SqlResult ( 
             String sql, 
-            (String name,object value)[] parameters, 
+            P[] parameters, 
             C connection, 
             T transaction)
         {
             _command = (CMD) connection.CreateCommand();
 
             _command.CommandText = sql;
-            Database<C,T,CMD,R,P>.SetParameters(_command, parameters);
+
+            foreach(var param in parameters){
+                _command.Parameters.Add(param);
+            }
 
             _command.Transaction = transaction;
 
@@ -254,7 +257,7 @@ namespace DirectSQL
 
         public static dynamic[] LoadSqlResult(
             String sql,
-            (String name, object value)[] parameters,
+            P[] parameters,
             C connection, 
             T transaction)
         {
@@ -275,6 +278,20 @@ namespace DirectSQL
             return list.ToArray();
         }
 
+        public static dynamic[] LoadSqlResult(
+            String sql,
+            (String name, object value)[] parameters,
+            C connection, 
+            T transaction)
+        {
+            return LoadSqlResult(
+                sql,
+                Database<C,T,CMD,R,P>.ConvertToDbParameter(parameters),
+                connection,
+                transaction
+            );
+        }
+
         public static async Task<dynamic[]> LoadSqlResultAsync(
             String sql,
             C connection,
@@ -290,6 +307,20 @@ namespace DirectSQL
         public static async Task<dynamic[]> LoadSqlResultAsync(
             String sql,
             (String name, object value)[] parameters,
+            C connection,
+            T transaction)
+        {
+            return await LoadSqlResultAsync(
+                sql,
+                Database<C,T,CMD,R,P>.ConvertToDbParameter(parameters),
+                connection,
+                transaction
+            );
+        }
+
+         public static async Task<dynamic[]> LoadSqlResultAsync(
+            String sql,
+            P[] parameters,
             C connection,
             T transaction)
         {
@@ -314,7 +345,7 @@ namespace DirectSQL
             });
 
             return await task;
-        }
+        }       
 
         public static dynamic[] LoadSqlResult(
             String sql,
