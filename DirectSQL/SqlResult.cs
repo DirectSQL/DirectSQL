@@ -175,7 +175,6 @@ namespace DirectSQL
         {
         }        
 
-
         /// <summary>
         /// Move cursor to next
         /// </summary>

@@ -154,8 +154,7 @@ namespace DirectSQL
             Object transaction)
         {
             using( var command = (CMD) connection.CreateCommand())
-            {
-                
+            {                
                 if( transaction != defaultTransaction)
                     command.Transaction = (T) transaction;
 
@@ -175,7 +174,6 @@ namespace DirectSQL
         /// <param name="connection">connection to execute sql</param>
         /// <param name="transaction">transaction to execute sql.</param>
         /// <returns>affected row count</returns>
-
         private static int ExecuteNonQuery(
             string sql,
             P[] parameters,
@@ -184,13 +182,13 @@ namespace DirectSQL
         {
             return ExecuteNonQueryCore(sql,parameters,connection,transaction);
         }
+
         /// Execute a sql like update / insert
         /// </summary>
         /// <param name="sql">sql to execute</param>
         /// <param name="parameters">parameter values bound to sql</param>
         /// <param name="connection">connection to execute sql</param>
         /// <returns>affected row count</returns>
-
         private static int ExecuteNonQuery(
             string sql,
             P[] parameters,
@@ -548,7 +546,6 @@ namespace DirectSQL
         /// <param name="sql">a sql to query</param>
         /// <param name="parameters">parameter values bound to sql</param>
         /// <param name="connection">a connection to execute sql</param>
-
         /// <param name="readResult">function to read result of sql</param>
         public static void Query(
             string sql,
