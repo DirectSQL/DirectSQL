@@ -377,6 +377,7 @@ namespace DirectSQL
             return await task;
         }
 
+        //Marker object indicates default transaction is used.
         private static readonly Object defaultTransaction = new Object();       
 
         private class Enumerable<TP> : IEnumerable<TP> 
