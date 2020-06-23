@@ -153,7 +153,7 @@ namespace DirectSQL
                 _command.Parameters.Add(param);
             }
 
-            if(transaction != defaultTransaction) {
+            if(transaction != Database<C,T,CMD,R,P>.defaultTransaction) {
                 _command.Transaction = (T)transaction;
             }
 
@@ -171,7 +171,7 @@ namespace DirectSQL
         internal SqlResult ( 
             String sql, 
             P[] parameters, 
-            C connection) : this( sql, parameters, connection, defaultTransaction)
+            C connection) : this( sql, parameters, connection, Database<C, T, CMD, R, P>.defaultTransaction)
         {
         }        
 
@@ -376,9 +376,6 @@ namespace DirectSQL
 
             return await task;
         }
-
-        //Marker object indicates default transaction is used.
-        private static readonly Object defaultTransaction = new Object();       
 
         private class Enumerable<TP> : IEnumerable<TP> 
         {

@@ -877,7 +877,7 @@ namespace DirectSQL
         }
 
         //Marker object indicates default transaction is used.
-        private static readonly Object defaultTransaction = new Object();
+        internal static readonly Object defaultTransaction = new Object();
 
         public class SqlResult: DirectSQL.SqlResult<R,CMD,T,C,P>
         {
