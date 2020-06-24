@@ -167,6 +167,7 @@ namespace DirectSQL
             }
         }
 
+        /// <summary>
         /// Execute a sql like update / insert
         /// </summary>
         /// <param name="sql">sql to execute</param>
@@ -183,6 +184,7 @@ namespace DirectSQL
             return ExecuteNonQueryCore(sql,parameters,connection,transaction);
         }
 
+        /// <summary>
         /// Execute a sql like update / insert
         /// </summary>
         /// <param name="sql">sql to execute</param>
