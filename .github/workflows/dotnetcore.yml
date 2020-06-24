@@ -18,4 +18,4 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --configuration Release
     - name: Push to GitHub Package
-      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg" -s https://nuget.pkg.github.com/OWNER/index.json -k ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg" -s https://nuget.pkg.github.com/directsql/index.json -k ${{ secrets.GITHUB_TOKEN }}
