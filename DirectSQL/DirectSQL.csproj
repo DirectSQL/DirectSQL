@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.1.0</Version>
+    <Version>3.5.0</Version>
     <Authors />
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/DirectSQL/DirectSQL/</PackageProjectUrl>
@@ -36,7 +36,7 @@ This .NET library is very thin database framework on top of System.Data.</Descri
   </ItemGroup>
 
  <ItemGroup>
-    <None Include="LICENSE" Pack="true" PackagePath=""/>
+    <None Include="LICENSE" Pack="true" PackagePath="" />
 </ItemGroup> 
 
 </Project>
