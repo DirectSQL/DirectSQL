@@ -13,6 +13,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
+        source-url: https://nuget.pkg.github.com/directsql/index.json
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Build with dotnet
@@ -20,4 +21,4 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --configuration Release
     - name: Push to GitHub Package
-      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg" -s https://nuget.pkg.github.com/directsql/index.json
+      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg"
