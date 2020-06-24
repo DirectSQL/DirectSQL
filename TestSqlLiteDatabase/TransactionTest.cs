@@ -71,7 +71,6 @@ namespace TestSqlLiteDatabase
                             InsertDataForTest(conn);
                         }
                     );
-
                 }
             }
             catch (TransactionAbortedException)
@@ -92,7 +91,6 @@ namespace TestSqlLiteDatabase
                 );
 
                 scope.Complete();
-
             }
 
             await db.ProcessAsync(
