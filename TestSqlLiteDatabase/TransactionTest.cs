@@ -8,6 +8,7 @@ using DirectSQL;
 using DirectSQL.SqlLite;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Transactions;
 
 namespace TestSqlLiteDatabase
 {
@@ -17,78 +18,94 @@ namespace TestSqlLiteDatabase
         [TestMethod]
         public void TestTransaction()
         {
-            SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
+            SqlLiteDatabase db = 
+                new SqlLiteDatabase(RandomNameMemDbConnectionString());
+            db.Process(CreateTableForTest);
 
-            db.Process((connection) => {
-                CreateTableForTest(connection);
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    db.Process(InsertDataForTest);
+                }
+            }
+            catch (TransactionAbortedException)
+            {
+                //Ignore  here
+            }
 
-                SqlLiteDatabase.Transaction(connection,
-                    (conn, tran) => {
-                        InsertDataForTest(conn, tran);
-                        tran.Rollback();
-                    }
-                );
-
-                SqlLiteDatabase.Transaction(connection,
-                    (conn, tran) =>
+            using (var scope = new TransactionScope())
+            {
+                db.Process(
+                    (conn) =>
                     {
-                        AssertDataCount(0, conn, tran);
-                        InsertDataForTest(conn, tran);
-                        AssertDataCount(1, conn, tran);
-                        tran.Commit();
+                        AssertDataCount(0, conn);
+                        InsertDataForTest(conn);
+                        AssertDataCount(1, conn);
                     }
                 );
+                scope.Complete();
+            }
 
-                SqlLiteDatabase.Transaction(connection,
-                    (conn, tran) =>
-                    {
-                        AssertDataCount(1, conn, tran);
-                    }
-                );
-            });
+            db.Process(
+                (conn) => { AssertDataCount(1, conn); }
+            );
         }
 
         [TestMethod]
         public async Task TestTransactionAsync()
         {
-            SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
+            SqlLiteDatabase db = 
+                new SqlLiteDatabase(RandomNameMemDbConnectionString());
 
-            await db.ProcessAsync(async (connection) => {
-                CreateTableForTest(connection);
+            await db.ProcessAsync(async (connection) => { CreateTableForTest(connection); });
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) => {
-                        await Task.Delay(1);
-                        InsertDataForTest(conn, tran);
-                        tran.Rollback();
-                    }
-                );
+            try
+            {
+                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    await db.ProcessAsync(
+                        async (conn) =>
+                        {
+                            await Task.Delay(1);
+                            InsertDataForTest(conn);
+                        }
+                    );
+                }
+            }
+            catch (TransactionAbortedException)
+            {
+                //Ignore
+            }
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await db.ProcessAsync(
+                    async (conn) =>
                     {
                         await Task.Delay(1);
-                        AssertDataCount(0, conn, tran);
-                        InsertDataForTest(conn, tran);
-                        AssertDataCount(1, conn, tran);
-                        tran.Commit();
+                        AssertDataCount(0, conn);
+                        InsertDataForTest(conn);
+                        AssertDataCount(1, conn);
                     }
                 );
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
-                    {
-                        await Task.Delay(1);
-                        AssertDataCount(1, conn, tran);
-                    }
-                );
-            });
+                scope.Complete();
+            }
+
+            await db.ProcessAsync(
+                async (conn) =>
+                {
+                    await Task.Delay(1);
+                    AssertDataCount(1, conn);
+                }
+            );
         }
 
-        private static void AssertDataCount(long expectedCount,SQLiteConnection conn, SQLiteTransaction tran)
+        private static void AssertDataCount(long expectedCount,SQLiteConnection conn)
         {
             Assert.AreEqual(
-                SqlLiteDatabase.ExecuteScalar("select count(*) from TEST_TABLE", conn, tran),
+                SqlLiteDatabase.ExecuteScalar("select count(*) from TEST_TABLE", conn),
                 expectedCount);
         }
 
@@ -106,7 +123,7 @@ namespace TestSqlLiteDatabase
             }
         }
 
-        private static void InsertDataForTest(SQLiteConnection conn, SQLiteTransaction tran)
+        private static void InsertDataForTest(SQLiteConnection conn)
         {
             SqlLiteDatabase.ExecuteNonQuery(
                 "insert into TEST_TABLE(TEST_COL1) " +
@@ -114,8 +131,12 @@ namespace TestSqlLiteDatabase
                 new (string, object)[] {
                     ("@testVal1","testValue")
                 },
-                conn,
-                tran);
+                conn);
+        }
+
+        private static string RandomNameMemDbConnectionString()
+        {
+            return $"DataSource=file:{Guid.NewGuid()}?mode=memory&cache=shared";
         }
     }
 }

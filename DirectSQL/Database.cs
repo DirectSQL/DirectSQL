@@ -143,17 +143,20 @@ namespace DirectSQL
         /// <param name="sql">sql to execute</param>
         /// <param name="parameters">parameter values bound to sql</param>
         /// <param name="connection">connection to execute sql</param>
-        /// <param name="transaction">transaction to execute sql</param>
+        /// <param name="transaction">
+        ///  transaction to execute sql. 
+        ///  If value is defaultTransaction, this value is not used and default value in command is used.</param>
         /// <returns>affected row count</returns>
-        public static int ExecuteNonQuery(
+        private static int ExecuteNonQueryCore(
             string sql,
             P[] parameters,
             C connection,
-            T transaction)
+            Object transaction)
         {
             using( var command = (CMD) connection.CreateCommand())
-            {
-                command.Transaction = transaction;
+            {                
+                if( transaction != defaultTransaction)
+                    command.Transaction = (T) transaction;
 
                 command.CommandText = sql;
                 foreach( var param in parameters ){
@@ -162,6 +165,40 @@ namespace DirectSQL
 
                 return command.ExecuteNonQuery();
             }
+        }
+
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql.</param>
+        /// <returns>affected row count</returns>
+        private static int ExecuteNonQuery(
+            string sql,
+            P[] parameters,
+            C connection,
+            T transaction)
+        {
+            return ExecuteNonQueryCore(sql,parameters,connection,transaction);
+        }
+
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <returns>affected row count</returns>
+        private static int ExecuteNonQuery(
+            string sql,
+            P[] parameters,
+            C connection)
+        {
+            return ExecuteNonQueryCore(
+                sql,
+                parameters,
+                connection,
+                defaultTransaction);
         }
 
         /// <summary>
@@ -178,11 +215,32 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-            return ExecuteNonQuery(
+            return ExecuteNonQueryCore(
                 sql,
                 ConvertToDbParameter(parameters),
                 connection,
                 transaction
+            );
+        }
+
+        /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <returns>affected row count</returns>
+        public static int ExecuteNonQuery(
+            string sql,
+            (String name, object value)[] parameters,
+            C connection
+        )
+        {
+            return ExecuteNonQueryCore(
+                sql,
+                ConvertToDbParameter(parameters),
+                connection,
+                defaultTransaction
             );
         }
 
@@ -196,13 +254,33 @@ namespace DirectSQL
         public static int ExecuteNonQuery(
             string sql,
             C connection,
-            T transaction)
+            T transaction
+        )
         {
             return ExecuteNonQuery(
                 sql, 
                 new ValueTuple<String, object>[0], 
                 connection, 
                 transaction
+            );
+        }
+
+        /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>affected row count</returns>
+        public static int ExecuteNonQuery(
+            string sql,
+            C connection
+        )
+        {
+            return ExecuteNonQuery(
+                sql, 
+                new ValueTuple<String, object>[0], 
+                connection
             );
         }
 
@@ -230,6 +308,59 @@ namespace DirectSQL
         }
 
         /// <summary>
+        /// Execute a sql like update / insert
+        /// </summary>
+        /// <remarks>
+        /// Formattable string is handled as sql with bind parameters
+        /// </remarks>
+        /// <param name="sql">sql to execute in formattable string</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <returns>affected row count</returns>
+        public static int ExecuteFormattableNonQuery(
+            FormattableString sql,
+            C connection
+        )
+        {
+            var sqlAndParams = ExtractSqlAndParam(sql);
+            return ExecuteNonQuery(
+                sqlAndParams.sql,
+                sqlAndParams.parameters,
+                connection);
+        }
+
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteScalarCore(
+            string sql,
+            P[] parameters,
+            C connection,
+            Object transaction)
+        {
+            using (var command = (CMD) connection.CreateCommand())
+            {
+                if( transaction != defaultTransaction)
+                {
+                    command.Transaction = (T)transaction;
+                }
+
+                command.CommandText = sql;
+                
+                foreach(var param in parameters)
+                {
+                    command.Parameters.Add(param);
+                }
+
+                return command.ExecuteScalar();
+            }
+        }
+        
+        /// <summary>
         /// Execute a sql and get a scalar.
         /// </summary>
         /// <param name="sql">sql to execute</param>
@@ -253,6 +384,25 @@ namespace DirectSQL
         /// Execute a sql and get a scalar.
         /// </summary>
         /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteScalar(
+            string sql,
+            C connection)
+        {
+            return ExecuteScalarCore(
+                sql, 
+                new P[0], 
+                connection, 
+                defaultTransaction
+            );
+        }
+
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
         /// <param name="parameters">parameter values bound to sql</param>
         /// <param name="connection">connection to execute sql</param>
         /// <param name="transaction">transaction to execute sql</param>
@@ -263,18 +413,22 @@ namespace DirectSQL
             C connection,
             T transaction)
         {
-            using (var command = (CMD) connection.CreateCommand())
-            {
-                command.Transaction = transaction;
-                command.CommandText = sql;
-                
-                foreach(var param in parameters)
-                {
-                    command.Parameters.Add(param);
-                }
+            return ExecuteScalarCore(sql,parameters,connection,transaction);
+        }
 
-                return command.ExecuteScalar();
-            }
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteScalar(
+            string sql,
+            P[] parameters,
+            C connection)
+        {
+            return ExecuteScalarCore(sql,parameters,connection,defaultTransaction);
         }
 
         /// <summary>
@@ -298,6 +452,26 @@ namespace DirectSQL
                 transaction
             );
         }
+        /// <summary>
+        
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteScalar(
+            string sql,
+            (String name, object value)[] parameters,
+            C connection)
+        {
+            return ExecuteScalarCore(
+                sql,
+                ConvertToDbParameter(parameters),
+                connection,
+                defaultTransaction
+            );
+        }
 
         /// <summary>
         /// Execute a sql and get a scalar.
@@ -319,6 +493,25 @@ namespace DirectSQL
                 transaction
             );
         }
+
+        /// <summary>
+        /// Execute a sql and get a scalar.
+        /// </summary>
+        /// <param name="sql">sql to execute</param>
+        /// <param name="connection">connection to execute sql</param>
+        /// <param name="transaction">transaction to execute sql</param>
+        /// <returns>result of sql</returns>
+        public static object ExecuteFormattableScalar(
+            FormattableString sql,
+            C connection)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            return ExecuteScalar(
+                extracted.sql, 
+                extracted.parameters, 
+                connection
+            );
+        }        
 
         /// <summary>
         /// Execute a sql to query
@@ -353,6 +546,30 @@ namespace DirectSQL
         /// <param name="sql">a sql to query</param>
         /// <param name="parameters">parameter values bound to sql</param>
         /// <param name="connection">a connection to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
+        public static void Query(
+            string sql,
+            P[] parameters,  
+            C connection, 
+            ReadSqlResult<R,CMD,T,C,P> readResult)
+        {
+            using (var result = 
+                    new SqlResult<R,CMD,T,C,P>(
+                        sql,
+                        parameters,
+                        connection))
+            {
+                result.Init();
+                readResult(result);
+            }
+        }        
+
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">a connection to execute sql</param>
         /// <param name="transaction">a transaction to execute sql</param>
         /// <param name="readResult">function to read result of sql</param>
         public static void Query(
@@ -373,6 +590,31 @@ namespace DirectSQL
                 readResult(result);
             }
         }
+
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="parameters">parameter values bound to sql</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="transaction">a transaction to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
+        public static void Query(
+            string sql,
+            (String name, object value)[] parameters,  
+            C connection, 
+            ReadSqlResult<R,CMD,T,C,P> readResult)
+        {
+            using (var result = 
+                    new SqlResult<R,CMD,T,C,P>(
+                        sql,
+                        ConvertToDbParameter(parameters),
+                        connection))
+            {
+                result.Init();
+                readResult(result);
+            }
+        }        
 
         /// <summary>
         /// Execute a sql to query
@@ -403,6 +645,26 @@ namespace DirectSQL
         /// <param name="connection">a connection to execute sql</param>
         /// <param name="transaction">a transaction to execute sql</param>
         /// <param name="readResult">function to read result of sql</param>
+        public static void Query(
+            string sql,
+            C connection,
+            ReadSqlResult<R,CMD,T,C,P> readResult)
+        {
+            Query(
+                sql, 
+                new (String,object)[0],
+                connection, 
+                readResult
+            );
+        }
+
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="transaction">a transaction to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
         public static void QueryFormattable(
             FormattableString sql,
             C connection,
@@ -415,6 +677,26 @@ namespace DirectSQL
                 extracted.parameters, 
                 connection, 
                 transaction, 
+                readResult
+            );
+        }
+        
+        /// <summary>
+        /// Execute a sql to query
+        /// </summary>
+        /// <param name="sql">a sql to query</param>
+        /// <param name="connection">a connection to execute sql</param>
+        /// <param name="readResult">function to read result of sql</param>
+        public static void QueryFormattable(
+            FormattableString sql,
+            C connection,
+            ReadSqlResult<R,CMD,T,C,P>  readResult)
+        {
+            var extracted = ExtractSqlAndParam(sql);
+            Query(
+                extracted.sql, 
+                extracted.parameters, 
+                connection, 
                 readResult
             );
         }
@@ -593,6 +875,9 @@ namespace DirectSQL
                 connection,
                 transaction);
         }
+
+        //Marker object indicates default transaction is used.
+        internal static readonly Object defaultTransaction = new Object();
 
         public class SqlResult: DirectSQL.SqlResult<R,CMD,T,C,P>
         {

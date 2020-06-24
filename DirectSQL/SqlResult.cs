@@ -139,11 +139,11 @@ namespace DirectSQL
             }
         }
 
-        internal SqlResult ( 
+        private SqlResult ( 
             String sql, 
             P[] parameters, 
             C connection, 
-            T transaction)
+            Object transaction)
         {
             _command = (CMD) connection.CreateCommand();
 
@@ -153,10 +153,27 @@ namespace DirectSQL
                 _command.Parameters.Add(param);
             }
 
-            _command.Transaction = transaction;
+            if(transaction != Database<C,T,CMD,R,P>.defaultTransaction) {
+                _command.Transaction = (T)transaction;
+            }
 
             _allowInitialize = true;
         }
+
+        internal SqlResult ( 
+            String sql, 
+            P[] parameters, 
+            C connection, 
+            T transaction) : this( sql, parameters, connection, (Object) transaction)
+        {
+        }
+
+        internal SqlResult ( 
+            String sql, 
+            P[] parameters, 
+            C connection) : this( sql, parameters, connection, Database<C, T, CMD, R, P>.defaultTransaction)
+        {
+        }        
 
         /// <summary>
         /// Move cursor to next
@@ -358,7 +375,7 @@ namespace DirectSQL
             });
 
             return await task;
-        }       
+        }
 
         private class Enumerable<TP> : IEnumerable<TP> 
         {
