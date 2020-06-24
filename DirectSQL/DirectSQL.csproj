@@ -3,12 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.5.0</Version>
+    <Version>3.5.1</Version>
     <Authors />
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/DirectSQL/DirectSQL/</PackageProjectUrl>
     <Description>Execute SQL directly !
 This .NET library is very thin database framework on top of System.Data.</Description>
+    <RepositoryUrl>https://github.com/directsql/directsql</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
