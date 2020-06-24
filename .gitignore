@@ -266,3 +266,6 @@ __pycache__/
 
 # Mac .DS_Store
 .DS_Store
+
+# nuget.config
+DirectSQL/nuget.config
