@@ -21,4 +21,4 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --configuration Release
     - name: Push to GitHub Package
-      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg"
+      run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg" --skip-duplicate 
