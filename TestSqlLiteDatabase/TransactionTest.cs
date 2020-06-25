@@ -58,7 +58,10 @@ namespace TestSqlLiteDatabase
             SqlLiteDatabase db = 
                 new SqlLiteDatabase(RandomNameMemDbConnectionString());
 
-            await db.ProcessAsync(async (connection) => { CreateTableForTest(connection); });
+            await db.ProcessAsync(async (connection) => { 
+                await Task.Delay(1);
+                CreateTableForTest(connection); 
+            });
 
             try
             {
