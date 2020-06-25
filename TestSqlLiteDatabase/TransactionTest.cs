@@ -70,8 +70,9 @@ namespace TestSqlLiteDatabase
                     await db.ProcessAsync(
                         async (conn) =>
                         {
-                            await Task.Delay(1);
-                            InsertDataForTest(conn);
+                            await Task.Run(() =>{
+                                InsertDataForTest(conn);
+                            });
                         }
                     );
                 }
@@ -86,10 +87,11 @@ namespace TestSqlLiteDatabase
                 await db.ProcessAsync(
                     async (conn) =>
                     {
-                        await Task.Delay(1);
-                        AssertDataCount(0, conn);
-                        InsertDataForTest(conn);
-                        AssertDataCount(1, conn);
+                        await Task.Run(() => {
+                            AssertDataCount(0, conn);
+                            InsertDataForTest(conn);
+                            AssertDataCount(1, conn);
+                        });
                     }
                 );
 
@@ -99,8 +101,9 @@ namespace TestSqlLiteDatabase
             await db.ProcessAsync(
                 async (conn) =>
                 {
-                    await Task.Delay(1);
-                    AssertDataCount(1, conn);
+                    await Task.Run(() => {
+                        AssertDataCount(1, conn);
+                    });
                 }
             );
         }

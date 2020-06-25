@@ -58,28 +58,31 @@ namespace TestSqlLiteDatabase
 
                 await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) => {
-                        await Task.Delay(1);
-                        InsertDataForTest(conn, tran);
-                        tran.Rollback();
+                        await Task.Run(() => {
+                            InsertDataForTest(conn, tran);
+                            tran.Rollback();
+                        });
                     }
                 );
 
                 await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) =>
                     {
-                        await Task.Delay(1);
-                        AssertDataCount(0, conn, tran);
-                        InsertDataForTest(conn, tran);
-                        AssertDataCount(1, conn, tran);
-                        tran.Commit();
+                        await Task.Run(() => {
+                            AssertDataCount(0, conn, tran);
+                            InsertDataForTest(conn, tran);
+                            AssertDataCount(1, conn, tran);
+                            tran.Commit();
+                        });
                     }
                 );
 
                 await SqlLiteDatabase.TransactionAsync(connection,
                     async (conn, tran) =>
                     {
-                        await Task.Delay(1);
-                        AssertDataCount(1, conn, tran);
+                        await Task.Run(() => {
+                            AssertDataCount(1, conn, tran);
+                        });
                     }
                 );
             });
