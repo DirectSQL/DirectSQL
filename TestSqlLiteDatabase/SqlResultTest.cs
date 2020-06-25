@@ -11,6 +11,8 @@ using System.Data;
 using System.Linq;
 using System.Data.SQLite;
 
+using System.Threading.Tasks;
+
 namespace TestSqlLiteDatabase
 {
     [TestClass]
@@ -240,10 +242,10 @@ namespace TestSqlLiteDatabase
         }
 
         [TestMethod]
-        public void TestLoadAsync()
+        public async Task TestLoadAsync()
         {
             var db = new SqlLiteDatabase("Data Source=:memory:");
-            db.Process((conn, tran) =>
+            await db.ProcessAsync(async (conn, tran) =>
             {
                 CreateTableForTest(conn);
 
@@ -251,25 +253,23 @@ namespace TestSqlLiteDatabase
                 InsertDataForTest(conn, tran);
 
                 dynamic[] result =
-                    SqlLiteDatabase
+                    await SqlLiteDatabase
                     .SqlResult
                     .LoadSqlResultAsync(
                         "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                         conn,
-                        tran)
-                    .Result;
+                        tran);
 
                 Assert.AreEqual(result[0].TEST_COL1, "testValue");
                 Assert.AreEqual(result[0].TEST_COL2, 123);
                 Assert.AreEqual(result.Length, 2);
 
                 dynamic[] result2 =
-                    SqlLiteDatabase
+                    await SqlLiteDatabase
                     .LoadSqlResultAsync(
                         "select TEST_COL1,TEST_COL2 from TEST_TABLE",
                         conn,
-                        tran)
-                    .Result;
+                        tran);
 
                 Assert.AreEqual(result2[0].TEST_COL1, "testValue");
                 Assert.AreEqual(result2[0].TEST_COL2, 123);
@@ -277,11 +277,11 @@ namespace TestSqlLiteDatabase
 
                 var val = "testValue";
                     dynamic[] result3 =
-                    SqlLiteDatabase
+                    await SqlLiteDatabase
                     .LoadFormattableSqlResultAsync(
                         $"select * from TEST_TABLE where TEST_COL1 = {val}",
                         conn,
-                        tran).Result;
+                        tran);
 
                 Assert.AreEqual(result3[0].TEST_COL1, "testValue");
                 Assert.AreEqual(result3[0].TEST_COL2, 123);
