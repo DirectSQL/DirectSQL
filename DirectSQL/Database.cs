@@ -897,13 +897,11 @@ namespace DirectSQL
 
         internal class DefaultTransaction : IDbTransaction
         {
-
             //Marker object indicates default transaction is used.
             internal static readonly DefaultTransaction defaultTransaction = new DefaultTransaction();
 
             private DefaultTransaction()
             {
-
             }
 
             public void Dispose()
@@ -924,6 +922,5 @@ namespace DirectSQL
             public IDbConnection Connection { get; }
             public IsolationLevel IsolationLevel { get; }
         }
-
     }
 }
