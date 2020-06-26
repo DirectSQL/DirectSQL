@@ -895,9 +895,14 @@ namespace DirectSQL
             }
         }
 
+        /// <summary>
+        /// Marker object indicates default transaction is used.
+        /// </summary>
         internal class DefaultTransaction : IDbTransaction
         {
-            //Marker object indicates default transaction is used.
+            /// <summary>
+            /// Instance of DefaultTransaction
+            /// </summary>
             internal static readonly DefaultTransaction defaultTransaction = new DefaultTransaction();
 
             private DefaultTransaction()
