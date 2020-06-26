@@ -143,7 +143,7 @@ namespace DirectSQL
             String sql, 
             P[] parameters, 
             C connection, 
-            Object transaction)
+            IDbTransaction transaction)
         {
             _command = (CMD) connection.CreateCommand();
 
@@ -153,7 +153,10 @@ namespace DirectSQL
                 _command.Parameters.Add(param);
             }
 
-            if(transaction != Database<C,T,CMD,R,P>.defaultTransaction) {
+            if(transaction != 
+               Database<C,T,CMD,R,P>
+                   .DefaultTransaction
+                   .defaultTransaction) {
                 _command.Transaction = (T)transaction;
             }
 
@@ -164,14 +167,19 @@ namespace DirectSQL
             String sql, 
             P[] parameters, 
             C connection, 
-            T transaction) : this( sql, parameters, connection, (Object) transaction)
+            T transaction) : this( sql, parameters, connection, (IDbTransaction) transaction)
         {
         }
 
         internal SqlResult ( 
             String sql, 
             P[] parameters, 
-            C connection) : this( sql, parameters, connection, Database<C, T, CMD, R, P>.defaultTransaction)
+            C connection) : 
+            this( 
+                sql, 
+                parameters, 
+                connection, 
+                Database<C, T, CMD, R, P>.DefaultTransaction.defaultTransaction)
         {
         }        
 

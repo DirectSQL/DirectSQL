@@ -151,11 +151,11 @@ namespace DirectSQL
             string sql,
             P[] parameters,
             C connection,
-            Object transaction)
+            IDbTransaction transaction)
         {
             using( var command = (CMD) connection.CreateCommand())
             {                
-                if( transaction != defaultTransaction)
+                if( transaction != DefaultTransaction.defaultTransaction)
                     command.Transaction = (T) transaction;
 
                 command.CommandText = sql;
@@ -200,7 +200,8 @@ namespace DirectSQL
                 sql,
                 parameters,
                 connection,
-                defaultTransaction);
+                DefaultTransaction.defaultTransaction
+            );
         }
 
         /// <summary>
@@ -242,7 +243,7 @@ namespace DirectSQL
                 sql,
                 ConvertToDbParameter(parameters),
                 connection,
-                defaultTransaction
+                DefaultTransaction.defaultTransaction
             );
         }
 
@@ -342,11 +343,11 @@ namespace DirectSQL
             string sql,
             P[] parameters,
             C connection,
-            Object transaction)
+            IDbTransaction transaction)
         {
             using (var command = (CMD) connection.CreateCommand())
             {
-                if( transaction != defaultTransaction)
+                if( transaction != DefaultTransaction.defaultTransaction)
                 {
                     command.Transaction = (T)transaction;
                 }
@@ -397,7 +398,7 @@ namespace DirectSQL
                 sql, 
                 new P[0], 
                 connection, 
-                defaultTransaction
+                DefaultTransaction.defaultTransaction
             );
         }
 
@@ -430,7 +431,12 @@ namespace DirectSQL
             P[] parameters,
             C connection)
         {
-            return ExecuteScalarCore(sql,parameters,connection,defaultTransaction);
+            return ExecuteScalarCore(
+                sql,
+                parameters,
+                connection,
+                DefaultTransaction.defaultTransaction
+            );
         }
 
         /// <summary>
@@ -471,7 +477,7 @@ namespace DirectSQL
                 sql,
                 ConvertToDbParameter(parameters),
                 connection,
-                defaultTransaction
+                DefaultTransaction.defaultTransaction
             );
         }
 
@@ -878,9 +884,6 @@ namespace DirectSQL
                 transaction);
         }
 
-        //Marker object indicates default transaction is used.
-        internal static readonly Object defaultTransaction = new Object();
-
         public class SqlResult: DirectSQL.SqlResult<R,CMD,T,C,P>
         {
             internal SqlResult(
@@ -891,5 +894,36 @@ namespace DirectSQL
             {
             }
         }
+
+        internal class DefaultTransaction : IDbTransaction
+        {
+
+            //Marker object indicates default transaction is used.
+            internal static readonly DefaultTransaction defaultTransaction = new DefaultTransaction();
+
+            private DefaultTransaction()
+            {
+
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Commit()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Rollback()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IDbConnection Connection { get; }
+            public IsolationLevel IsolationLevel { get; }
+        }
+
     }
 }
