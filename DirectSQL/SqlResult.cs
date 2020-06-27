@@ -154,9 +154,7 @@ namespace DirectSQL
             }
 
             if(transaction != 
-               Database<C,T,CMD,R,P>
-                   .DefaultTransaction
-                   .defaultTransaction) {
+                   DefaultTransaction.defaultTransaction) {
                 _command.Transaction = (T)transaction;
             }
 
@@ -179,7 +177,7 @@ namespace DirectSQL
                 sql, 
                 parameters, 
                 connection, 
-                Database<C, T, CMD, R, P>.DefaultTransaction.defaultTransaction)
+                DefaultTransaction.defaultTransaction)
         {
         }        
 
