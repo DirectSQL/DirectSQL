@@ -84,13 +84,14 @@ namespace DirectSQL
         /// </summary>
         /// <param name="execute">execution with a connection</param>
         /// <returns></returns>
-        public async Task ProcessAsync(AsyncConnectExecution<C> execute)
+        public async Task<Database<C,T,CMD,R,P>> ProcessAsync(AsyncConnectExecution<C> execute)
         {
             using (var connection = CreateConnection())
             {
                 connection.Open();
                 await execute(connection);
             }
+            return this;
         }
 
         /// <summary>
@@ -98,9 +99,9 @@ namespace DirectSQL
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
         /// <returns></returns>
-        public async Task ProcessAsync(AsyncSqlExecution<C,T> execute)
+        public async Task<Database<C,T,CMD,R,P>> ProcessAsync(AsyncSqlExecution<C,T> execute)
         {
-           await ProcessAsync(async (connection) =>
+           return await ProcessAsync(async (connection) =>
            {
                await TransactionAsync(connection, execute);
            });
@@ -110,22 +111,23 @@ namespace DirectSQL
         /// Synchronous process with a connection
         /// </summary>
         /// <param name="execute">execution with a connection</param>
-        public void Process(ConnectExecution<C> execute)
+        public Database<C,T,CMD,R,P> Process(ConnectExecution<C> execute)
         {
             using (var connection = CreateConnection())
             {
                 connection.Open();
                 execute(connection);
             }
+            return this;
         }
 
         /// <summary>
         /// Synchronous process with a connection and a transaction
         /// </summary>
         /// <param name="execute">execution with a connection and a transaction</param>
-        public void Process(SqlExecution<C,T> execute)
+        public Database<C,T,CMD,R,P> Process(SqlExecution<C,T> execute)
         {
-            Process((connection) =>
+            return Process((connection) =>
             {
                 Transaction(connection, execute);
             });
