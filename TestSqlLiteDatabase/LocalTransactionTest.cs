@@ -17,7 +17,7 @@ namespace TestSqlLiteDatabase
         [TestMethod]
         public void TestTransaction()
         {
-            SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
+            SqlLiteDatabase db = new SqlLiteDatabase(TransactionTest.RandomNameMemDbConnectionString());
 
             db.Process((connection) => {
                 CreateTableForTest(connection);
@@ -45,46 +45,62 @@ namespace TestSqlLiteDatabase
                         AssertDataCount(1, conn, tran);
                     }
                 );
+            }).Process((connection) => {
+                SqlLiteDatabase.Transaction(connection,
+                    (conn,tran) =>{
+                        AssertDataCount(1, conn, tran);
+                    }
+                );                
             });
         }
 
         [TestMethod]
         public async Task TestTransactionAsync()
         {
-            SqlLiteDatabase db = new SqlLiteDatabase("Data Source=:memory:");
+            SqlLiteDatabase db = new SqlLiteDatabase(TransactionTest.RandomNameMemDbConnectionString());
 
-            await db.ProcessAsync(async (connection) => {
-                CreateTableForTest(connection);
+            await (
+                await db.ProcessAsync(
+                    async (connection) => {
+                        CreateTableForTest(connection);
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) => {
-                        await Task.Run(() => {
-                            InsertDataForTest(conn, tran);
-                            tran.Rollback();
-                        });
-                    }
-                );
+                        await SqlLiteDatabase.TransactionAsync(connection,
+                            async (conn, tran) => {
+                                await Task.Run(() => {
+                                    InsertDataForTest(conn, tran);
+                                    tran.Rollback();
+                                });
+                            }
+                        );
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
-                    {
-                        await Task.Run(() => {
-                            AssertDataCount(0, conn, tran);
-                            InsertDataForTest(conn, tran);
-                            AssertDataCount(1, conn, tran);
-                            tran.Commit();
-                        });
-                    }
-                );
+                        await SqlLiteDatabase.TransactionAsync(connection,
+                            async (conn, tran) =>
+                            {
+                                await Task.Run(() => {
+                                    AssertDataCount(0, conn, tran);
+                                    InsertDataForTest(conn, tran);
+                                    AssertDataCount(1, conn, tran);
+                                    tran.Commit();
+                                });
+                            }
+                        );
 
-                await SqlLiteDatabase.TransactionAsync(connection,
-                    async (conn, tran) =>
-                    {
-                        await Task.Run(() => {
-                            AssertDataCount(1, conn, tran);
-                        });
-                    }
-                );
+                        await SqlLiteDatabase.TransactionAsync(connection,
+                            async (conn, tran) =>
+                            {
+                                await Task.Run(() => {
+                                    AssertDataCount(1, conn, tran);
+                                });
+                            }
+                        );
+
+                    })
+            ).ProcessAsync(async (connection) => {
+                await SqlLiteDatabase.TransactionAsync(connection, async (conn,tran) => {
+                    await Task.Run(() => {
+                        AssertDataCount(1, conn, tran);
+                    });                                    
+                });
             });
         }
 

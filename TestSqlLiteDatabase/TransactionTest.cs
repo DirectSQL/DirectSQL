@@ -140,7 +140,7 @@ namespace TestSqlLiteDatabase
                 conn);
         }
 
-        private static string RandomNameMemDbConnectionString()
+        internal static string RandomNameMemDbConnectionString()
         {
             return $"DataSource=file:{Guid.NewGuid()}?mode=memory&cache=shared";
         }
