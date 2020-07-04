@@ -93,7 +93,6 @@ namespace TestSqlLiteDatabase
                                 });
                             }
                         );
-
                     })
             ).ProcessAsync(async (connection) => {
                 await SqlLiteDatabase.TransactionAsync(connection, async (conn,tran) => {
