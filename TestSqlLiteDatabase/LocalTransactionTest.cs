@@ -45,13 +45,10 @@ namespace TestSqlLiteDatabase
                         AssertDataCount(1, conn, tran);
                     }
                 );
-            }).Process((connection) => {
-                SqlLiteDatabase.Transaction(connection,
-                    (conn,tran) =>{
-                        AssertDataCount(1, conn, tran);
-                    }
-                );                
-            });
+            }).Process((conn,tran) =>{
+                    AssertDataCount(1, conn, tran);
+                }
+            );
         }
 
         [TestMethod]
