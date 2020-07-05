@@ -763,7 +763,7 @@ namespace DirectSQL
             }
         }
 
-        private static(String sql, (String,Object)[] parameters) ExtractSqlAndParam(FormattableString sqlFormattableString)
+        private static (String sql, (String,Object)[] parameters) ExtractSqlAndParam(FormattableString sqlFormattableString)
         {
             var paramNames =
                 Enumerable.Range(0, sqlFormattableString.ArgumentCount)
