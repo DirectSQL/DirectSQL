@@ -206,10 +206,9 @@ namespace DirectSQL
                 _reader = (R) _command.ExecuteReader();
                 _allowInitialize = false;
 
-            _resultValues = null;
-            _resultTuples = null;
-            _resultFields = emptyFields;
-
+                _resultValues = null;
+                _resultTuples = null;
+                _resultFields = emptyFields;
             }
         }
 
