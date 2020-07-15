@@ -28,7 +28,8 @@ namespace DirectSQL
         private R _reader;
         private CMD _command;
 
-        private ImmutableArray<String> _resultFields;
+        private ImmutableArray<String> _resultFields = emptyFields;
+        private readonly static ImmutableArray<string> emptyFields = new ImmutableArray<string>();
 
         private ExpandoObject _resultValues;
         private (String name, Object value)[] _resultTuples;
@@ -204,12 +205,17 @@ namespace DirectSQL
 
                 _reader = (R) _command.ExecuteReader();
                 _allowInitialize = false;
+
+            _resultValues = null;
+            _resultTuples = null;
+            _resultFields = emptyFields;
+
             }
         }
 
         private void InitResultFields()
         {
-            if (_resultFields != null)
+            if (_resultFields != emptyFields)
                 return; //Already initialized. No need to init again.
 
             List<string> list = new List<string>();
