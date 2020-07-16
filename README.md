@@ -30,13 +30,12 @@ Please try :smile:.
 public static void example()
 {
     SqlLiteDatabase db = new SqlLiteDatabase("connectionString_to_yourdb");
-    db.Process((connection, transaction) =>
+    db.Process((connection) =>
     {
         SqlLiteDatabase.Query(
             "select TEST_VAL1,TEST_VAL2 from TEST_TABLE where TEST_VAL1 = @val1",
             new (String, object)[] {("@val1","abcdef")},
             connection,
-            transaction,
             (result) => {
                 while (result.Next())
                 {
@@ -55,14 +54,13 @@ public static void example()
 public static void example2()
 {
     SqlLiteDatabase db = new SqlLiteDatabase("connectionString_to_yourdb");
-    db.Process((connection, transaction) =>
+    db.Process((connection) =>
     {
         dynamic[] resultArray =
             SqlLiteDatabase
             .LoadSqlResult(
                 "select TEST_COL1,TEST_COL2 from TEST_TABLE",
-                connection,
-                transaction);
+                connection);
         
         Console.Out.WriteLine("TEST_VAL1:" + resultArray[0].TEST_VAL1);
         Console.Out.WriteLine("TEST_VAL2:" + resultArray[0].TEST_VAL2);
