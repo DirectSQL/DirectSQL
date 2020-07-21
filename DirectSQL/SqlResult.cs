@@ -123,6 +123,15 @@ namespace DirectSQL
         }
 
         /// <summary>
+        /// Return enumerable of SqlResult as dynamic
+        /// </summary>
+        /// <returns>Object which enumerate result of SqlResult</returns>
+        public IEnumerable<dynamic> AsEnumerable()
+        {
+            return new Enumerable<dynamic>(this, (obj => obj ));
+        }        
+
+        /// <summary>
         /// Result values as an array of tuples
         /// </summary>
         /// <remarks>

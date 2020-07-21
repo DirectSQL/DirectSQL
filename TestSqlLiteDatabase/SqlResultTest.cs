@@ -189,6 +189,17 @@ namespace TestSqlLiteDatabase
                             ).Sum();
 
                         Assert.AreEqual(123 * 2, sum2);
+
+                        var sum3 = 
+                            (
+                                from
+                                    dynamicObj in (result.AsEnumerable())
+                                select 
+                                    (int) dynamicObj.TEST_COL2
+                            ).Sum();
+                        
+                        Assert.AreEqual(123 * 2, sum3);
+
                     });
             });
         }
