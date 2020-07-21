@@ -17,7 +17,7 @@ namespace DirectSQL
     /// <typeparam name="T">Type of Transaction</typeparam>
     /// <typeparam name="C">Type of Connection</typeparam>
     /// <typeparam name="P">Type of DataParameter</typeparam>
-    public class SqlResult<R,CMD,T,C,P>:IDisposable 
+    public class SqlResult<R,CMD,T,C,P>:EnumerableObject<dynamic>,IDisposable
         where R : IDataReader 
         where CMD : IDbCommand 
         where T : IDbTransaction 
@@ -33,6 +33,8 @@ namespace DirectSQL
 
         private ExpandoObject _resultValues;
         private (String name, Object value)[] _resultTuples;
+
+        private IEnumerable<dynamic> _innerEnumerator;
 
         /// <summary>
         /// variable not to execute not needed initialization
@@ -169,6 +171,8 @@ namespace DirectSQL
             }
 
             _allowInitialize = true;
+
+            _innerEnumerator = AsEnumerable();
         }
 
         internal SqlResult ( 
@@ -397,6 +401,11 @@ namespace DirectSQL
             return await task;
         }
 
+        public override IEnumerator<dynamic> GetEnumerator()
+        {
+            return _innerEnumerator.GetEnumerator();
+        }
+
         private class Enumerable<TP> : IEnumerable<TP> 
         {
             private SqlResult<R,CMD,T,C,P> _sqlResult;
@@ -453,6 +462,16 @@ namespace DirectSQL
             {
                 _sqlResult.Init();
             }
+        }
+    }
+
+    /// <summary>
+    /// Walk around for prohibited implemeting IEnumerable<dynamic>
+    /// </summary>
+    public abstract class EnumerableObject<S>: IEnumerable<S> {
+        public abstract IEnumerator<S> GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator(){
+            return GetEnumerator();
         }
     }
 }

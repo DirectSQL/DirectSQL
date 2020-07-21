@@ -199,6 +199,16 @@ namespace TestSqlLiteDatabase
                             ).Sum();
                         
                         Assert.AreEqual(123 * 2, sum3);
+
+                        var sum4 = 
+                            (
+                                from
+                                    dynamicObj in result
+                                select 
+                                    (int) dynamicObj.TEST_COL2
+                            ).Sum();
+                        
+                        Assert.AreEqual(123 * 2, sum4);
                     });
             });
         }
