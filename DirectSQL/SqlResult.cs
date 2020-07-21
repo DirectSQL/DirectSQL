@@ -464,14 +464,4 @@ namespace DirectSQL
             }
         }
     }
-
-    /// <summary>
-    /// Walk around for prohibited implemeting IEnumerable<dynamic>
-    /// </summary>
-    public abstract class EnumerableObject<S>: IEnumerable<S> {
-        public abstract IEnumerator<S> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator(){
-            return GetEnumerator();
-        }
-    }
 }
