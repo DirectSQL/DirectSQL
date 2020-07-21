@@ -199,7 +199,6 @@ namespace TestSqlLiteDatabase
                             ).Sum();
                         
                         Assert.AreEqual(123 * 2, sum3);
-
                     });
             });
         }
