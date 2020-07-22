@@ -21,5 +21,5 @@ jobs:
     - name: Test with dotnet
       run: dotnet test --configuration Release
     - name: Push to GitHub Package
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       run: dotnet nuget push "DirectSQL/bin/Release/DirectSQL.*.nupkg" --skip-duplicate
