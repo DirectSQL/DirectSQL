@@ -9,7 +9,7 @@ namespace DirectSQL.MySql
 {
     public class MySqlDatabase : Database<MySqlConnection, MySqlTransaction, MySqlCommand, MySqlDataReader, MySqlParameter>
     {
-        readonly private String _mySqlConnectionString;
+        private readonly String _mySqlConnectionString;
 
         public MySqlDatabase(String mySqlConnectionString)
         {
