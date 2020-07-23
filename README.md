@@ -11,6 +11,9 @@ In this library, you can use SQL directly without taking care for lifecycle of c
 In many database framework, direct execution of SQL is more or less barriered from orthodox.
 This library resolve issues around that.
 
+Please try :smile:.
+
+# Database class as entry point
 Now, this library has supporting code for next DBMS
 * SQLite
 * SQL Server
@@ -20,9 +23,18 @@ Now, this library has supporting code for next DBMS
 * MySql
 * ODBC connected DBMS
 
-Documentation is [here](https://directsql.github.io/DirectSQL.Document/doc/).
+For each DBMS, corresponding Database class is prepared.
+* DirectSQL.SqlLite.SqlLiteDatabase
+* DirectSQL.SqlServer.SqlServerDatabase
+* DirectSQL.npgsql.NpgsqlDatabase
+* DirectSQL.DB2.DB2Database
+* DirectSQL.MySql.MySqlDatabase
+* DirectSQL.Odbc.OdbcDatabase
 
-Please try :smile:.
+These Database class is entry point of this library.
+
+# Documentation
+Documentation is [here](https://directsql.github.io/DirectSQL.Document/doc/).
 
 # Examples
 ## Example1
