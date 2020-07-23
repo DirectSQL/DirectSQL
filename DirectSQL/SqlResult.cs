@@ -34,7 +34,7 @@ namespace DirectSQL
         private ExpandoObject _resultValues;
         private (String name, Object value)[] _resultTuples;
 
-        private IEnumerable<dynamic> _innerEnumerator;
+        private readonly IEnumerable<dynamic> _innerEnumerator;
 
         /// <summary>
         /// variable not to execute not needed initialization
@@ -408,8 +408,8 @@ namespace DirectSQL
 
         private class Enumerable<TP> : IEnumerable<TP> 
         {
-            private SqlResult<R,CMD,T,C,P> _sqlResult;
-            private Func<dynamic, TP> _convert;
+            private readonly SqlResult<R,CMD,T,C,P> _sqlResult;
+            private readonly Func<dynamic, TP> _convert;
 
             internal Enumerable(
                 SqlResult<R,CMD,T,C, P> sqlResult,
@@ -434,7 +434,7 @@ namespace DirectSQL
         private class Enumerator<TP> : IEnumerator<TP>, IEnumerator 
         {
             private SqlResult<R,CMD,T,C,P> _sqlResult;
-            private Func<dynamic, TP> _convert;
+            private readonly Func<dynamic, TP> _convert;
 
             internal Enumerator(
                 SqlResult<R,CMD,T,C,P> sqlResult, 
