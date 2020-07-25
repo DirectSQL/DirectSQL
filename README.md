@@ -13,7 +13,7 @@ This library resolve issues around that.
 
 Please try :smile:.
 
-# Database class
+# Database class which is entry point
 Now, this library has supporting code for next DBMS
 * SQLite
 * SQL Server
