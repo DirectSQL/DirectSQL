@@ -80,9 +80,10 @@ public static void example2()
 }
 ```
 ## Refer [code in test project](https://github.com/DirectSQL/DirectSQL/tree/master/TestSqlLiteDatabase), also
-# How to Build
+# How to build and test
 ````
  git clone git@github.com:DirectSQL/DirectSQL.git
  cd DirectSQL
  dotnet build
+ dotnet test
 ````
