@@ -22,7 +22,7 @@ This library prepare corresponding Database class for supporting RDBMS
 * DirectSQL.MySql.MySqlDatabase (MySql)
 * DirectSQL.Odbc.OdbcDatabase (ODBC connected DBMS)
 
-These Database class is entry point of this library.
+These Database classes are entry point of this library.
 
 # Documentation
 Documentation is [here](https://directsql.github.io/DirectSQL.Document/doc/).
