@@ -14,22 +14,13 @@ This library resolve issues around that.
 Please try :smile:.
 
 # Where to start
-Now, this library has supporting code for next DBMS
-* SQLite
-* SQL Server
-* PostgreSQL (Npgsql)
-* CockroachDB (Npgsql)
-* DB2
-* MySql
-* ODBC connected DBMS
-
-For each DBMS, corresponding Database class is prepared.
-* DirectSQL.SqlLite.SqlLiteDatabase
-* DirectSQL.SqlServer.SqlServerDatabase
-* DirectSQL.npgsql.NpgsqlDatabase
-* DirectSQL.DB2.DB2Database
-* DirectSQL.MySql.MySqlDatabase
-* DirectSQL.Odbc.OdbcDatabase
+This library prepare corresponding Database class for supporting RDBMS
+* DirectSQL.SqlLite.SqlLiteDatabase (SQLite)
+* DirectSQL.SqlServer.SqlServerDatabase (SQL Server)
+* DirectSQL.npgsql.NpgsqlDatabase (PostgreSQL, CockroachDB)
+* DirectSQL.DB2.DB2Database (DB2)
+* DirectSQL.MySql.MySqlDatabase (MySql)
+* DirectSQL.Odbc.OdbcDatabase (ODBC connected DBMS)
 
 These Database class is entry point of this library.
 
