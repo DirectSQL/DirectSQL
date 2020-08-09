@@ -60,7 +60,8 @@ namespace DirectSQL
         where R : IDataReader 
         where T : IDbTransaction 
         where C : IDbConnection 
-        where P : IDataParameter;
+        where P : IDataParameter,
+        new();
 
     /// <summary>
     /// Database class is entry point of DirectSQL library.
@@ -75,7 +76,8 @@ namespace DirectSQL
         where T : IDbTransaction 
         where CMD : IDbCommand 
         where R : IDataReader 
-        where P : IDataParameter
+        where P : IDataParameter,
+        new()
     {
         /// <summary>
         /// Asynchronous process with a connection
@@ -779,20 +781,12 @@ namespace DirectSQL
 
         public static P CreateParameter(string name, object value)
         {
-            var paramType = typeof(P);
-            var constructor = paramType.GetConstructor(new Type[0]);
-            P param = (P) constructor.Invoke(new object[0]);
-            param.ParameterName = name;
-            param.Value = value;
-
-            return param;
+            return new P() { ParameterName = name, Value = value };
         }
 
         public static P CreateParameter(string name, object value, DbType type)
         {
-            var param = CreateParameter(name,value);
-            param.DbType = type;
-            return param;
+            return new P() { ParameterName = name, Value = value, DbType = type };
         }
 
         public static P[] ConvertToDbParameter((String name,Object value)[] tuples)

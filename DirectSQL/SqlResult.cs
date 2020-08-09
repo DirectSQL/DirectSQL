@@ -22,7 +22,8 @@ namespace DirectSQL
         where CMD : IDbCommand 
         where T : IDbTransaction 
         where C : IDbConnection 
-        where P : IDataParameter
+        where P : IDataParameter, 
+        new()
     {
         private R _reader;
         private CMD _command;
