@@ -88,7 +88,7 @@ namespace DirectSQL
         {
             using (var connection = CreateConnection())
             {
-                connection.Open();
+                await OpenConnectionAsync(connection);
                 await execute(connection);
             }
             return this;
@@ -138,6 +138,25 @@ namespace DirectSQL
         /// </summary>
         /// <returns></returns>
         protected abstract C CreateConnection();
+
+        /// <summary>
+        /// Open Connection asynchrously
+        /// </summary>
+        private async static Task<C> OpenConnectionAsync(C conn){
+            var task = Task.Run(() => { conn.Open(); });
+            await task;
+            return conn;
+        }
+
+        /// <summary>
+        /// Begin Transaction asynchronously
+        /// </summary>
+        private async static Task<T> BeginTransactionAsync(C conn){
+            T tran = default(T);
+            var task = Task.Run(() => { tran = (T) conn.BeginTransaction();});
+            await task;
+            return tran;
+        }
 
         /// <summary>
         /// Execute a sql like update / insert
@@ -747,7 +766,7 @@ namespace DirectSQL
             C connection, 
             AsyncSqlExecution<C,T> execute)
         {
-            using (var transaction = (T) connection.BeginTransaction())
+            using (var transaction = await BeginTransactionAsync(connection))
             {
                 try
                 {
