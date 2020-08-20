@@ -152,10 +152,8 @@ namespace DirectSQL
         /// Begin Transaction asynchronously
         /// </summary>
         private async static Task<T> BeginTransactionAsync(C conn){
-            T tran = default(T);
-            var task = Task.Run(() => { tran = (T) conn.BeginTransaction(); });
-            await task;
-            return tran;
+            var task = Task<T>.Run(() => { return (T) conn.BeginTransaction(); });
+            return await task;
         }
 
         /// <summary>
