@@ -143,7 +143,7 @@ namespace DirectSQL
         /// Open Connection asynchrously
         /// </summary>
         private async static Task<C> OpenConnectionAsync(C conn){
-            var task = Task.Run(() => { conn.Open();});
+            var task = Task.Run(() => { conn.Open(); });
             await task;
             return conn;
         }
@@ -153,7 +153,7 @@ namespace DirectSQL
         /// </summary>
         private async static Task<T> BeginTransactionAsync(C conn){
             T tran = default(T);
-            var task = Task.Run(() => { tran = (T) conn.BeginTransaction();});
+            var task = Task.Run(() => { tran = (T) conn.BeginTransaction(); });
             await task;
             return tran;
         }
