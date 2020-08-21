@@ -70,7 +70,7 @@ public static void example2()
     });
 }
 ```
-## Refer [code in test project](https://github.com/DirectSQL/DirectSQL/tree/master/TestSqlLiteDatabase), also
+## Refer [code in test project](https://github.com/DirectSQL/DirectSQL/tree/main/TestSqlLiteDatabase), also
 # How to build and test
 ````
  git clone git@github.com:DirectSQL/DirectSQL.git
