@@ -60,8 +60,7 @@ namespace DirectSQL
         where R : IDataReader 
         where T : IDbTransaction 
         where C : IDbConnection 
-        where P : IDataParameter,
-        new();
+        where P : IDataParameter, new();
 
     /// <summary>
     /// Database class is entry point of DirectSQL library.
@@ -76,8 +75,7 @@ namespace DirectSQL
         where T : IDbTransaction 
         where CMD : IDbCommand 
         where R : IDataReader 
-        where P : IDataParameter,
-        new()
+        where P : IDataParameter, new()
     {
         /// <summary>
         /// Asynchronous process with a connection
