@@ -31,7 +31,7 @@ namespace TestSqlLiteDatabase
                      transaction);
 
                 SqlLiteDatabase.Query(
-                    "select TEST_VAL1,TEST_VAL2 from TEST_TABLE",
+                    "select TEST_VAL1,TEST_VAL2 from TEST_TABLE order by 1",
                     connection,
                     transaction,
                     (result) => {
