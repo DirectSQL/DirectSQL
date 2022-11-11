@@ -17,7 +17,7 @@ This .NET library is very thin database framework on top of System.Data.</Descri
     <PackageReference Include="MySql.Data" Version="8.0.13" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="System.Data.Odbc" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.2" />
     <PackageReference Include="System.Data.SQLite.Core.MSIL" Version="1.0.109" />
   </ItemGroup>
 
