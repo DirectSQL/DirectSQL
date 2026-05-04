@@ -278,7 +278,7 @@ namespace DirectSQL
         {
             return ExecuteNonQuery(
                 sql, 
-                new ValueTuple<String, object>[0], 
+                Array.Empty<(string, object)>(), 
                 connection, 
                 transaction
             );
@@ -298,7 +298,7 @@ namespace DirectSQL
         {
             return ExecuteNonQuery(
                 sql, 
-                new ValueTuple<String, object>[0], 
+                Array.Empty<(string, object)>(), 
                 connection
             );
         }
@@ -393,7 +393,7 @@ namespace DirectSQL
         {
             return ExecuteScalar(
                 sql, 
-                new ValueTuple<String, object>[0], 
+                Array.Empty<(string, object)>(), 
                 connection, 
                 transaction
             );
@@ -412,7 +412,7 @@ namespace DirectSQL
         {
             return ExecuteScalarCore(
                 sql, 
-                new P[0], 
+                Array.Empty<P>(), 
                 connection, 
                 DefaultTransaction.defaultTransaction
             );
